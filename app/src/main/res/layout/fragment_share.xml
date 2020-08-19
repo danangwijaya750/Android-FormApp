@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/ll_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Gambar" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_image_exam"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <EditText
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:hint="Link Gambar"
+            android:layout_height="50dp"
+            android:id="@+id/et_url_image"
+            />
+        <TextView
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:text="Total Nilai yang diperoleh" />
+        <EditText
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/et_score"
+            android:editable="false"
+            />
+        <TextView
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:text="Akses" />
+        <Spinner
+            android:entries="@array/akses"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:id="@+id/sp_akses"
+            android:textSize="18sp"
+            android:layout_height="50dp"
+            android:text="Total Nilai yang diperoleh" />
+        <TextView
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:text="Waktu akses" />
+        <TextView
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:text="Mulai" />
+        <TextView
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:textSize="15sp"
+            android:id="@+id/tv_mulai"
+            android:layout_height="wrap_content"
+            android:text="" />
+        <TextView
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:text="Selesai" />
+        <TextView
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:textSize="15sp"
+            android:id="@+id/tv_selesai"
+            android:layout_height="wrap_content"
+            android:text="" />
+    </LinearLayout>
+</ScrollView>

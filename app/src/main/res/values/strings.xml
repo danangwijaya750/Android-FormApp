@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">FormApp</string>
+    <string-array name="kategori">
+        <item>Bahasa Indonesia</item>
+        <item>Bahasa Inggris</item>
+        <item>Ilmu Pengetahuan Alam</item>
+        <item>Ilmu Pengetahuan Sosial</item>
+        <item>Matematika</item>
+    </string-array>
+    <string-array name="akses">
+        <item>Publik</item>
+        <item>Private</item>
+    </string-array>
+</resources>

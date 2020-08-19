@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="110dp"
+    android:layout_margin="2dp"
+    android:padding="5dp"
+    >
+
+    <com.rishabhharit.roundedimageview.RoundedImageView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/iv_exam_image"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:background="@drawable/bg_item"
+        app:cornerRadius="10dp"
+        app:roundedCorners="all"
+        android:src="@drawable/bg_item" />
+
+    <TextView
+        android:id="@+id/tv_category_title"
+        android:padding="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="Buat Soal"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/iv_exam_image"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="5dp"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

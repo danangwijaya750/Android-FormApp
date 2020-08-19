@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dngwjy.formapp">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".ui.bank_soal.detail_bank_soal.DetailBankSoalActivity"></activity>
+        <activity android:name=".ui.bank_soal.detail_category.DetailCategoryActivity" />
+        <activity android:name=".ui.bank_soal.category.CategoryBankSoalActivity" />
+        <activity android:name=".ui.exam.CreateExamActivity" />
+        <activity android:name=".ui.teacher_dashboard.TeacherDashboardActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
