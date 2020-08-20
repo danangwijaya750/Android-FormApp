@@ -15,6 +15,7 @@ import com.dngwjy.formapp.base.RvAdapter
 import com.dngwjy.formapp.data.ExamModel
 import com.dngwjy.formapp.data.QuizModel
 import com.dngwjy.formapp.ui.bank_soal.category.CategoryBankSoalActivity
+import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
 import com.dngwjy.formapp.ui.exam.create.CreateQuizFragment
 import kotlinx.android.synthetic.main.activity_teacher_dashboard.*
@@ -33,6 +34,7 @@ class TeacherDashboardActivity : AppCompatActivity() {
     }
 
     private val popularExamAdapter= object:RvAdapter<ExamModel>(popularExamList,{
+        rvPopularClickHandler(it)
     }){
         override fun layoutId(position: Int, obj: ExamModel): Int = R.layout.item_populer_exam
         override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder = PopularExamVH(view)
@@ -72,16 +74,17 @@ class TeacherDashboardActivity : AppCompatActivity() {
             ,"ini ujian","Ilmu Pengetahuan Alam",4.8, mutableListOf("#hewan", "#tumbuhan","#tubuh")
             , 50,80,listOf(
                 QuizModel(
-                    1, "Masukan Pertayaan...",
-                    mutableListOf("Long Press to change...", "Long Press to change..."), "pilgan", "", 10
+                    1, "Paus termasuk hewan ...",
+                    mutableListOf("Reptil", "Mamalia","Insekta","Unggas"), "pilgan", "Mamalia", 10
                 ),
                 QuizModel(
-                    2, "Masukan Pertayaan...",
-                    mutableListOf("Long Press to change...", "Long Press to change..."), "pilgan", "", 10
+                    2, "Kambing pemakan rumput, disebut ...",
+                    mutableListOf("Karnivora","Omnivora"
+                        , "Herbivora"), "pilgan", "Herbivora", 10
                 ),
                 QuizModel(
-                    3, "Masukan Pertayaan...",
-                    mutableListOf("Long Press to change...", "Long Press to change..."), "pilgan", "", 10
+                    3, "Jumlah kaki Hiu adalah ...",
+                    mutableListOf(), "isian", "0", 10
                 )
             )))
         popularExamList.add(ExamModel("2","","Interaksi Sosial"
@@ -103,6 +106,11 @@ class TeacherDashboardActivity : AppCompatActivity() {
         if(data.id=="add-control"){
          showCreateNew()
         }
+    }
+    private fun rvPopularClickHandler(data:ExamModel){
+        val intent=Intent(this,DetailBankSoalActivity::class.java)
+        intent.putExtra("data-exam",data)
+        startActivity(intent)
     }
 
     private fun showCreateNew(){

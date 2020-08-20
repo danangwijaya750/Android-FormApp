@@ -1,5 +1,9 @@
 package com.dngwjy.formapp.data
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class QuizModel(
     var id:Int,
     var question:String,
@@ -7,4 +11,4 @@ data class QuizModel(
     var questionType:String,
     var answer:String,
     var score:Int
-)
+):Parcelable
