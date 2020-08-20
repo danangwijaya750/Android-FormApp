@@ -2,12 +2,16 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp"
+    app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/tv_question_number"
@@ -27,6 +31,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="13dp"
             android:background="@color/colorPrimary"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_question_number"
             app:layout_constraintTop_toBottomOf="@id/tv_question_number" />
@@ -36,20 +41,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_question_number"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@id/tv_question_number">
 
             <TextView
                 android:id="@+id/tv_pilgan_question"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:textColor="@android:color/black"
                 android:text="Pertanyaan..."
-                android:textSize="20sp"/>
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
 
             <RadioGroup
                 android:id="@+id/rg_option"
@@ -66,27 +70,26 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_question_number"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@id/tv_question_number">
 
             <TextView
                 android:id="@+id/tv_isian_question"
                 android:layout_width="fill_parent"
-                android:layout_margin="5dp"
-                android:textColor="@android:color/black"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:text="Masukan Pertanyaan"
-                android:textSize="20sp"/>
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_margin="5dp"
-                android:hint="Jawabanmu"
                 android:background="@drawable/et_rounded"
-                />
+                android:hint="Jawabanmu" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

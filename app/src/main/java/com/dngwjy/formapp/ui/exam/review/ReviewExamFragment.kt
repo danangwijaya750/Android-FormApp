@@ -28,8 +28,6 @@ class ReviewExamFragment : Fragment() {
     }
 
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,7 +52,7 @@ class ReviewExamFragment : Fragment() {
         rvAdapter.notifyDataSetChanged()
     }
 
-    public fun refreshData(){
+    fun refreshData() {
         rvAdapter.notifyDataSetChanged()
     }
 

@@ -10,10 +10,7 @@ import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
 import com.dngwjy.formapp.data.QuizModel
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.question_view_layout.*
-import kotlinx.android.synthetic.main.question_view_layout.ll_isian
-import kotlinx.android.synthetic.main.question_view_layout.ll_pilgan
-import kotlinx.android.synthetic.main.question_view_layout.rg_option
+import kotlinx.android.synthetic.main.question_view.*
 
 class QuestionViewVH (override val containerView: View): RecyclerView.ViewHolder(containerView)
     , LayoutContainer, RvAdapter.BinderData<QuizModel>{
@@ -41,7 +38,8 @@ class QuestionViewVH (override val containerView: View): RecyclerView.ViewHolder
             val params =
                 RadioGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
             params.setMargins(2,10,2,10)
-            rdBtn.layoutParams= params
+            rdBtn.layoutParams = params
+            rdBtn.textSize = 20f
             rdBtn.setPadding(10,10,10,10)
             rdBtn.id=View.generateViewId()
             rdBtn.background=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
@@ -59,6 +57,7 @@ class QuestionViewVH (override val containerView: View): RecyclerView.ViewHolder
             rdBtn.setTextColor(myList)
             rdBtn.text=value
             if(value==data.answer) rdBtn.isChecked=true
+            rdBtn.isEnabled = false
             rg_option.addView(rdBtn)
         }
     }

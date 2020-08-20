@@ -2,14 +2,11 @@ package com.dngwjy.formapp.ui.exam.create
 
 import android.app.AlertDialog
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
@@ -112,6 +109,7 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
             rdBtn.setPadding(10,10,10,10)
             rdBtn.id = View.generateViewId()
             rdBtn.text = value
+            rdBtn.textSize = 20f
             //rdBtn.setTextColor(containerView.context.resources.getColor(R.color.rb_selector))
             rdBtn.setOnLongClickListener {
                 changeOption(index, value, position, data, listen)

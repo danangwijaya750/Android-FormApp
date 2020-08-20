@@ -19,6 +19,7 @@ class ShareExamFragment : Fragment() {
 
     companion object {
         fun getInstance(): ShareExamFragment = ShareExamFragment()
+        var score = 0
     }
 
     override fun onCreateView(
