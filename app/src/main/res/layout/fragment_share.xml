@@ -4,95 +4,276 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <LinearLayout
         android:id="@+id/ll_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
         android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:textSize="18sp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="Gambar" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_image_exam"
-            android:layout_margin="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            <com.rishabhharit.roundedimageview.RoundedImageView
+                android:id="@+id/iv_cicle1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/bg_circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:layout_margin="5dp"
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="0dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/iv_cicle1"
+                app:layout_constraintStart_toStartOf="@id/iv_cicle1"
+                app:layout_constraintTop_toBottomOf="@id/iv_cicle1" />
+
+            <TextView
+                android:id="@+id/tv_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Tambahkan Gambar"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/iv_cicle1"
+                app:layout_constraintTop_toTopOf="@id/iv_cicle1" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_image_exam"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/et_rounded"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_picture"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_image"
+                app:layout_constraintTop_toBottomOf="@id/tv_image" />
+
+            <TextView
+                android:id="@+id/tv_atau"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="atau"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@id/et_url_image"
+                app:layout_constraintStart_toStartOf="@id/iv_image_exam"
+                app:layout_constraintTop_toTopOf="@id/et_url_image" />
+
+            <EditText
+                android:id="@+id/et_url_image"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/et_rounded"
+                android:hint="Link Gambar"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_atau"
+                app:layout_constraintTop_toBottomOf="@id/iv_image_exam" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:hint="Link Gambar"
-            android:layout_height="50dp"
-            android:id="@+id/et_url_image"
-            />
-        <TextView
-            android:layout_margin="5dp"
-            android:layout_width="wrap_content"
-            android:textSize="18sp"
-            android:layout_height="wrap_content"
-            android:text="Total Nilai yang diperoleh" />
-        <EditText
-            android:layout_margin="5dp"
+            android:layout_height="wrap_content">
+
+            <com.rishabhharit.roundedimageview.RoundedImageView
+                android:id="@+id/iv_cicle2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/bg_circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="0dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/iv_cicle2"
+                app:layout_constraintStart_toStartOf="@id/iv_cicle2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Total Nilai yang diperoleh"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/iv_cicle2"
+                app:layout_constraintTop_toTopOf="@id/iv_cicle2" />
+
+            <EditText
+                android:id="@+id/et_score"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/et_rounded"
+                android:editable="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_total"
+                app:layout_constraintTop_toBottomOf="@id/tv_total" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/et_score"
-            android:editable="false"
-            />
-        <TextView
-            android:layout_margin="5dp"
-            android:layout_width="wrap_content"
-            android:textSize="18sp"
-            android:layout_height="wrap_content"
-            android:text="Akses" />
-        <Spinner
-            android:entries="@array/akses"
-            android:layout_margin="5dp"
+            android:layout_height="wrap_content">
+
+            <com.rishabhharit.roundedimageview.RoundedImageView
+                android:id="@+id/iv_cicle3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/bg_circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="0dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/iv_cicle3"
+                app:layout_constraintStart_toStartOf="@id/iv_cicle3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_akses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Akses"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/iv_cicle3"
+                app:layout_constraintTop_toTopOf="@id/iv_cicle3" />
+
+            <Spinner
+                android:id="@+id/sp_akses"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/et_rounded"
+                android:entries="@array/akses"
+                android:text="Total Nilai yang diperoleh"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_akses"
+                app:layout_constraintTop_toBottomOf="@id/tv_akses" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:id="@+id/sp_akses"
-            android:textSize="18sp"
-            android:layout_height="50dp"
-            android:text="Total Nilai yang diperoleh" />
-        <TextView
-            android:layout_margin="5dp"
-            android:layout_width="wrap_content"
-            android:textSize="18sp"
-            android:layout_height="wrap_content"
-            android:text="Waktu akses" />
-        <TextView
-            android:layout_margin="5dp"
-            android:layout_width="wrap_content"
-            android:textSize="18sp"
-            android:layout_height="wrap_content"
-            android:text="Mulai" />
-        <TextView
-            android:layout_margin="5dp"
-            android:layout_width="wrap_content"
-            android:textSize="15sp"
-            android:id="@+id/tv_mulai"
-            android:layout_height="wrap_content"
-            android:text="" />
-        <TextView
-            android:layout_margin="5dp"
-            android:layout_width="wrap_content"
-            android:textSize="18sp"
-            android:layout_height="wrap_content"
-            android:text="Selesai" />
-        <TextView
-            android:layout_margin="5dp"
-            android:layout_width="wrap_content"
-            android:textSize="15sp"
-            android:id="@+id/tv_selesai"
-            android:layout_height="wrap_content"
-            android:text="" />
+            android:layout_height="wrap_content">
+
+            <com.rishabhharit.roundedimageview.RoundedImageView
+                android:id="@+id/iv_cicle4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/bg_circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="0dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/iv_cicle4"
+                app:layout_constraintStart_toStartOf="@id/iv_cicle4"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_waktu_akses"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Waktu akses"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/iv_cicle4"
+                app:layout_constraintTop_toTopOf="@id/iv_cicle4" />
+
+            <TextView
+                android:id="@+id/tv_mulai"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/et_rounded"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text=""
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_waktu_akses"
+                app:layout_constraintTop_toBottomOf="@id/tv_waktu_akses" />
+
+
+            <TextView
+                android:id="@+id/tv_selesai"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/et_rounded"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text=""
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_waktu_akses"
+                app:layout_constraintTop_toBottomOf="@id/tv_mulai" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.rishabhharit.roundedimageview.RoundedImageView
+                android:id="@+id/iv_cicle5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/bg_circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_tags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Tags"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/iv_cicle5"
+                app:layout_constraintTop_toTopOf="@id/iv_cicle5" />
+
+            <EditText
+                android:id="@+id/et_tags"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/et_rounded"
+                android:editable="false"
+                android:hint="Tag Berdasar KI KD"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tv_tags"
+                app:layout_constraintTop_toBottomOf="@id/tv_tags" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </ScrollView>
