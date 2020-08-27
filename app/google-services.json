@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "312222901298",
+    "firebase_url": "https://formforexam-670e3.firebaseio.com",
+    "project_id": "formforexam-670e3",
+    "storage_bucket": "formforexam-670e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312222901298:android:82887d311d4d210bb7882b",
+        "android_client_info": {
+          "package_name": "com.dngwjy.formapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312222901298-nqpnaf2k1j5e5lp2rt95fadct1dntll0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjiVu1iLhLA3Y6NHvF94h8FB76Y0CWjHE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312222901298-nqpnaf2k1j5e5lp2rt95fadct1dntll0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

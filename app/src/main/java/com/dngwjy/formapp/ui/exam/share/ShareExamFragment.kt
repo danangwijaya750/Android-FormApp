@@ -1,12 +1,18 @@
 package com.dngwjy.formapp.ui.exam.share
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.dngwjy.formapp.R
 import kotlinx.android.synthetic.main.fragment_share.*
 import java.text.SimpleDateFormat
@@ -14,6 +20,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
+
 
 class ShareExamFragment : Fragment() {
 
@@ -48,6 +55,47 @@ class ShareExamFragment : Fragment() {
         tv_selesai.setOnClickListener {
             pickDateTime(1)
         }
+        iv_image_exam.setOnClickListener {
+            pickImage()
+        }
+    }
+
+    private fun pickImage() {
+        val i = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        // ******** code for crop image
+        i.putExtra("crop", "true")
+        i.putExtra("aspectX", 100)
+        i.putExtra("aspectY", 100)
+        i.putExtra("outputX", 256)
+        i.putExtra("outputY", 356)
+
+        try {
+            i.putExtra("return-data", true)
+            startActivityForResult(
+                Intent.createChooser(i, "Select Picture"), 0
+            )
+        } catch (ex: ActivityNotFoundException) {
+            ex.printStackTrace()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            try {
+                val uri = data?.data
+                val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
+                setImage(bitmap)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun setImage(bitmap: Bitmap?) {
+        Glide.with(this)
+            .load(bitmap)
+            .into(iv_image_exam)
     }
 
     private fun pickDateTime(caller: Int) {
@@ -66,7 +114,7 @@ class ShareExamFragment : Fragment() {
                     TimePickerDialog.OnTimeSetListener { _, hour, minute ->
                         val pickedDateTime = Calendar.getInstance()
                         pickedDateTime.set(year, month, day, hour, minute)
-                        val sdf=SimpleDateFormat("dd-MM-yyyy hh:mm")
+                        val sdf = SimpleDateFormat("dd-MM-yyyy hh:mm")
                         when (caller) {
                             0 -> tv_mulai.text = sdf.format(pickedDateTime.time)
                             1 -> tv_selesai.text = sdf.format(pickedDateTime.time)

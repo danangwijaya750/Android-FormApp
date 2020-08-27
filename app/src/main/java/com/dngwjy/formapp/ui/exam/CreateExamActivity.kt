@@ -1,35 +1,40 @@
 package com.dngwjy.formapp.ui.exam
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.dngwjy.formapp.R
+import com.dngwjy.formapp.data.ExamModel
 import com.dngwjy.formapp.data.QuizModel
 import com.dngwjy.formapp.ui.exam.create.CreateQuizFragment
+import com.dngwjy.formapp.ui.exam.result.ResultQuizFragment
 import com.dngwjy.formapp.ui.exam.review.ReviewExamFragment
 import com.dngwjy.formapp.ui.exam.share.ShareExamFragment
 import com.dngwjy.formapp.util.logE
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_create_exam.*
 
-class CreateExamActivity : AppCompatActivity(),CreateQuizFragment.OnChangedFragmentListener {
+class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFragmentListener,
+    CreateExamView {
 
-    companion object{
-        var examTitle=""
-        var keterangan=""
-        var kategori=""
-        val questionList= mutableListOf<QuizModel>()
+    companion object {
+        var examTitle = ""
+        var keterangan = ""
+        var kategori = ""
+        val questionList = mutableListOf<QuizModel>()
     }
+
+    private val presenter = CreateExamPresenter(FirebaseFirestore.getInstance(), this)
 
     override fun onAttachFragment(fragment: Fragment) {
         if(fragment is CreateQuizFragment){
             fragment.setOnHeadlineSelectedListener(this)
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,15 +48,19 @@ class CreateExamActivity : AppCompatActivity(),CreateQuizFragment.OnChangedFragm
             adapter=FragmentAdapter(this@CreateExamActivity.supportFragmentManager)
         }
         tl_main.setupWithViewPager(vp_main)
+        iv_back.setOnClickListener { onBackPressed() }
 
     }
 
     class FragmentAdapter(fm:FragmentManager):FragmentPagerAdapter(fm){
-        private val pages=listOf(CreateQuizFragment.getInstance()
-            ,ReviewExamFragment.getInstance()
-            ,ShareExamFragment.getInstance())
+        private val pages=listOf(
+            CreateQuizFragment.getInstance(),
+            ReviewExamFragment.getInstance(),
+            ShareExamFragment.getInstance(),
+            ResultQuizFragment.getInstance()
+        )
 
-        private val pagesTitle= listOf("BUAT","REVIEW","SHARE")
+        private val pagesTitle = listOf("BUAT", "REVIEW", "SHARE", "HASIL")
 
         override fun getItem(position: Int): Fragment = pages[position]
 
@@ -79,13 +88,29 @@ class CreateExamActivity : AppCompatActivity(),CreateQuizFragment.OnChangedFragm
             setPositiveButton("Ya"){dialog, which ->
                 dialog.dismiss()
                 questionList.clear()
-                CreateQuizFragment.questionCount=0
+                CreateQuizFragment.questionCount = 0
                 super.onBackPressed()
                 finish()
             }
-            setNegativeButton("tidak"){dialog, which ->
+            setNegativeButton("tidak") { dialog, which ->
                 dialog.dismiss()
             }
         }.create().show()
+    }
+
+    override fun isLoading(state: Boolean) {
+
+    }
+
+    override fun isError(msg: String) {
+
+    }
+
+    override fun showUploadExamResult(data: ExamModel?) {
+
+    }
+
+    override fun showUploadQuestionResult(data: QuizModel?) {
+
     }
 }
