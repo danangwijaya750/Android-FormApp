@@ -1,11 +1,10 @@
 package com.dngwjy.formapp.ui.bank_soal.detail_category
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
@@ -58,27 +57,82 @@ class DetailCategoryActivity : AppCompatActivity() {
     }
 
     private fun getMatematika(){
-        listExam.add(ExamModel("3","","Penjumlahan"
-            ,"ini ujian","Matematika",4.5, mutableListOf("#jumlah", "#tambah","#matematika")
-            , 48,60,listOf()))
+        listExam.add(
+            ExamModel(
+                "3",
+                "",
+                "Penjumlahan",
+                "ini ujian",
+                "Matematika",
+                4.5,
+                mutableListOf("#jumlah", "#tambah", "#matematika"),
+                48,
+                60,
+                mutableListOf()
+            )
+        )
     }
     private fun getIps(){
-        listExam.add(ExamModel("2","","Interaksi Sosial"
-            ,"ini ujian","Ilmu Pengetahuan Sosial",4.2, mutableListOf("#interaksi", "#keragaman")
-            , 38,80,listOf()))
+        listExam.add(
+            ExamModel(
+                "2",
+                "",
+                "Interaksi Sosial",
+                "ini ujian",
+                "Ilmu Pengetahuan Sosial",
+                4.2,
+                mutableListOf("#interaksi", "#keragaman"),
+                38,
+                80,
+                mutableListOf()
+            )
+        )
     }
     private fun getIpa(){
-        listExam.add(ExamModel("1","","Makhluk Hidup"
-            ,"ini ujian","Ilmu Pengetahuan Alam",4.8, mutableListOf("#hewan", "#tumbuhan","#tubuh")
-            , 50,80,listOf()))
+        listExam.add(
+            ExamModel(
+                "1",
+                "",
+                "Makhluk Hidup",
+                "ini ujian",
+                "Ilmu Pengetahuan Alam",
+                4.8,
+                mutableListOf("#hewan", "#tumbuhan", "#tubuh"),
+                50,
+                80,
+                mutableListOf()
+            )
+        )
     }
     private fun getBIndo(){
-        listExam.add(ExamModel("4","","Pantun"
-            ,"ini ujian","Bahasa Indonesia",4.7, mutableListOf("#pantun", "#bindo","#sajak")
-            , 41,76,listOf()))
-        listExam.add(ExamModel("5","","Cerpen"
-            ,"ini ujian","Bahasa Indonesia",4.4, mutableListOf("#cerita", "#pendek")
-            , 53,84,listOf()))
+        listExam.add(
+            ExamModel(
+                "4",
+                "",
+                "Pantun",
+                "ini ujian",
+                "Bahasa Indonesia",
+                4.7,
+                mutableListOf("#pantun", "#bindo", "#sajak"),
+                41,
+                76,
+                mutableListOf()
+            )
+        )
+        listExam.add(
+            ExamModel(
+                "5",
+                "",
+                "Cerpen",
+                "ini ujian",
+                "Bahasa Indonesia",
+                4.4,
+                mutableListOf("#cerita", "#pendek"),
+                53,
+                84,
+                mutableListOf()
+            )
+        )
     }
     private fun getBIng(){
 

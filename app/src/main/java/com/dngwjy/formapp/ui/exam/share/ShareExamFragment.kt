@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.dngwjy.formapp.R
+import com.dngwjy.formapp.ui.exam.CreateExamActivity
 import kotlinx.android.synthetic.main.fragment_share.*
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -48,12 +49,16 @@ class ShareExamFragment : Fragment() {
             Instant.now()
                 .atZone(ZoneId.of("Asia/Jakarta")).plusHours(1)
         )
+        CreateExamActivity.startDate = tv_mulai.text.toString()
+        CreateExamActivity.endDate = tv_selesai.text.toString()
 
         tv_mulai.setOnClickListener {
             pickDateTime(0)
+            CreateExamActivity.startDate = tv_mulai.text.toString()
         }
         tv_selesai.setOnClickListener {
             pickDateTime(1)
+            CreateExamActivity.endDate = tv_selesai.text.toString()
         }
         iv_image_exam.setOnClickListener {
             pickImage()
@@ -129,5 +134,12 @@ class ShareExamFragment : Fragment() {
             startMonth,
             startDay
         ).show()
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            CreateExamActivity.fragmentPosition = 2
+        }
     }
 }

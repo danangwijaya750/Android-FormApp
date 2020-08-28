@@ -56,5 +56,12 @@ class ReviewExamFragment : Fragment() {
         rvAdapter.notifyDataSetChanged()
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            CreateExamActivity.fragmentPosition = 1
+        }
+    }
+
 
 }

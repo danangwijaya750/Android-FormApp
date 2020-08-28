@@ -123,6 +123,13 @@ class CreateQuizFragment : Fragment() {
         callback!!.onChanged()
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            CreateExamActivity.fragmentPosition = 0
+        }
+    }
+
     interface OnChangedFragmentListener {
         fun onChanged()
     }

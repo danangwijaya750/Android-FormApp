@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.dngwjy.formapp.R
-import com.dngwjy.formapp.data.ExamModel
 import com.dngwjy.formapp.data.QuizModel
 import com.dngwjy.formapp.ui.exam.create.CreateQuizFragment
 import com.dngwjy.formapp.ui.exam.result.ResultQuizFragment
@@ -26,6 +25,10 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         var keterangan = ""
         var kategori = ""
         val questionList = mutableListOf<QuizModel>()
+        var accessType = ""
+        var fragmentPosition = 0
+        var startDate = ""
+        var endDate = ""
     }
 
     private val presenter = CreateExamPresenter(FirebaseFirestore.getInstance(), this)
@@ -38,17 +41,22 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         
+
         window.requestFeature(Window.FEATURE_ACTION_BAR)
         setContentView(R.layout.activity_create_exam)
         supportActionBar?.hide()
 
-        tv_exam_name.text= examTitle
+        tv_exam_name.text = examTitle
         vp_main.apply {
-            adapter=FragmentAdapter(this@CreateExamActivity.supportFragmentManager)
+            adapter = FragmentAdapter(this@CreateExamActivity.supportFragmentManager)
         }
         tl_main.setupWithViewPager(vp_main)
         iv_back.setOnClickListener { onBackPressed() }
+        iv_next.setOnClickListener {
+            if (fragmentPosition == 2) {
+                uploadExamData()
+            }
+        }
 
     }
 
@@ -98,6 +106,23 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         }.create().show()
     }
 
+    fun uploadExamData() {
+        presenter.uploadExam(
+            examTitle,
+            kategori,
+            keterangan,
+            "",
+            accessType,
+            "",
+            startDate,
+            endDate
+        )
+    }
+
+    fun uploadExamQuestions(examId: String) {
+
+    }
+
     override fun isLoading(state: Boolean) {
 
     }
@@ -106,9 +131,10 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
 
     }
 
-    override fun showUploadExamResult(data: ExamModel?) {
-
+    override fun showUploadExamResult(data: String) {
+        uploadExamQuestions(data)
     }
+
 
     override fun showUploadQuestionResult(data: QuizModel?) {
 

@@ -1,13 +1,15 @@
 package com.dngwjy.formapp.ui.teacher_dashboard
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
-import android.view.WindowManager
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
@@ -17,7 +19,6 @@ import com.dngwjy.formapp.data.QuizModel
 import com.dngwjy.formapp.ui.bank_soal.category.CategoryBankSoalActivity
 import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
-import com.dngwjy.formapp.ui.exam.create.CreateQuizFragment
 import kotlinx.android.synthetic.main.activity_teacher_dashboard.*
 
 class TeacherDashboardActivity : AppCompatActivity() {
@@ -46,17 +47,22 @@ class TeacherDashboardActivity : AppCompatActivity() {
         window.requestFeature(Window.FEATURE_ACTION_BAR)
         setContentView(R.layout.activity_teacher_dashboard)
         supportActionBar?.hide()
-        myExamList.add(0, ExamModel("add-control","","","","",0.0, mutableListOf(), 0,0,listOf()))
+        myExamList.add(
+            0, ExamModel(
+                "add-control", "", "", "", "", 0.0, mutableListOf(), 0, 0,
+                mutableListOf()
+            )
+        )
         rv_ujian_anda.apply {
-            adapter=myExamAdapter
-            val layManager=LinearLayoutManager(this@TeacherDashboardActivity)
-            layManager.orientation=LinearLayoutManager.HORIZONTAL
-            layoutManager=layManager
+            adapter = myExamAdapter
+            val layManager = LinearLayoutManager(this@TeacherDashboardActivity)
+            layManager.orientation = LinearLayoutManager.HORIZONTAL
+            layoutManager = layManager
         }
         rv_ujian_populer.apply {
-            adapter=popularExamAdapter
-            val layManager=LinearLayoutManager(this@TeacherDashboardActivity)
-            layManager.orientation=LinearLayoutManager.VERTICAL
+            adapter = popularExamAdapter
+            val layManager = LinearLayoutManager(this@TeacherDashboardActivity)
+            layManager.orientation = LinearLayoutManager.VERTICAL
             layoutManager=layManager
         }
 
@@ -70,35 +76,95 @@ class TeacherDashboardActivity : AppCompatActivity() {
     }
 
     private fun populatePopularExam(){
-        popularExamList.add(ExamModel("1","","Makhluk Hidup"
-            ,"ini ujian","Ilmu Pengetahuan Alam",4.8, mutableListOf("#hewan", "#tumbuhan","#tubuh")
-            , 50,80,listOf(
-                QuizModel(
-                    1, "Paus termasuk hewan ...",
-                    mutableListOf("Reptil", "Mamalia","Insekta","Unggas"), "pilgan", "Mamalia", 10
-                ),
-                QuizModel(
-                    2, "Kambing pemakan rumput, disebut ...",
-                    mutableListOf("Karnivora","Omnivora"
-                        , "Herbivora"), "pilgan", "Herbivora", 10
-                ),
-                QuizModel(
-                    3, "Jumlah kaki Hiu adalah ...",
-                    mutableListOf(), "isian", "0", 10
+        popularExamList.add(
+            ExamModel(
+                "1",
+                "",
+                "Makhluk Hidup",
+                "ini ujian",
+                "Ilmu Pengetahuan Alam",
+                4.8,
+                mutableListOf("#hewan", "#tumbuhan", "#tubuh"),
+                50,
+                80,
+                mutableListOf(
+                    QuizModel(
+                        1,
+                        "Paus termasuk hewan ...",
+                        mutableListOf("Reptil", "Mamalia", "Insekta", "Unggas"),
+                        "pilgan",
+                        "Mamalia",
+                        10
+                    ),
+                    QuizModel(
+                        2, "Kambing pemakan rumput, disebut ...",
+                        mutableListOf(
+                            "Karnivora", "Omnivora", "Herbivora"
+                        ), "pilgan", "Herbivora", 10
+                    ),
+                    QuizModel(
+                        3, "Jumlah kaki Hiu adalah ...",
+                        mutableListOf(), "isian", "0", 10
+                    )
                 )
-            )))
-        popularExamList.add(ExamModel("2","","Interaksi Sosial"
-            ,"ini ujian","Ilmu Pengetahuan Sosial",4.2, mutableListOf("#interaksi", "#keragaman")
-            , 38,80,listOf()))
-        popularExamList.add(ExamModel("3","","Penjumlahan"
-            ,"ini ujian","Matematika",4.5, mutableListOf("#jumlah", "#tambah","#matematika")
-            , 48,60,listOf()))
-        popularExamList.add(ExamModel("4","","Pantun"
-            ,"ini ujian","Bahasa Indonesia",4.7, mutableListOf("#pantun", "#bindo","#sajak")
-            , 41,76,listOf()))
-        popularExamList.add(ExamModel("5","","Cerpen"
-            ,"ini ujian","Bahasa Indonesia",4.4, mutableListOf("#cerita", "#pendek")
-            , 53,84,listOf()))
+            )
+        )
+        popularExamList.add(
+            ExamModel(
+                "2",
+                "",
+                "Interaksi Sosial",
+                "ini ujian",
+                "Ilmu Pengetahuan Sosial",
+                4.2,
+                mutableListOf("#interaksi", "#keragaman"),
+                38,
+                80,
+                mutableListOf()
+            )
+        )
+        popularExamList.add(
+            ExamModel(
+                "3",
+                "",
+                "Penjumlahan",
+                "ini ujian",
+                "Matematika",
+                4.5,
+                mutableListOf("#jumlah", "#tambah", "#matematika"),
+                48,
+                60,
+                mutableListOf()
+            )
+        )
+        popularExamList.add(
+            ExamModel(
+                "4",
+                "",
+                "Pantun",
+                "ini ujian",
+                "Bahasa Indonesia",
+                4.7,
+                mutableListOf("#pantun", "#bindo", "#sajak"),
+                41,
+                76,
+                mutableListOf()
+            )
+        )
+        popularExamList.add(
+            ExamModel(
+                "5",
+                "",
+                "Cerpen",
+                "ini ujian",
+                "Bahasa Indonesia",
+                4.4,
+                mutableListOf("#cerita", "#pendek"),
+                53,
+                84,
+                mutableListOf()
+            )
+        )
 
     }
 
