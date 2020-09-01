@@ -19,26 +19,30 @@ import com.dngwjy.formapp.data.QuizModel
 import com.dngwjy.formapp.ui.bank_soal.category.CategoryBankSoalActivity
 import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
+import com.dngwjy.formapp.util.toast
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_teacher_dashboard.*
 
-class TeacherDashboardActivity : AppCompatActivity() {
+class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
 
-    val myExamList= mutableListOf<ExamModel>()
-    val popularExamList= mutableListOf<ExamModel>()
+    val myExamList = mutableListOf<ExamModel>()
+    val popularExamList = mutableListOf<ExamModel?>()
+    private val presenter = TeacherDashboardPresenter(FirebaseFirestore.getInstance(), this)
 
-    private val myExamAdapter= object:RvAdapter<ExamModel>(myExamList,{
+    private val myExamAdapter = object : RvAdapter<ExamModel>(myExamList, {
         rvMyExamClickHandler(it)
-    }){
+    }) {
         override fun layoutId(position: Int, obj: ExamModel): Int = R.layout.item_my_exam
         override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder = MyExamVH(view)
 
     }
 
-    private val popularExamAdapter= object:RvAdapter<ExamModel>(popularExamList,{
+    private val popularExamAdapter = object : RvAdapter<ExamModel?>(popularExamList, {
         rvPopularClickHandler(it)
-    }){
-        override fun layoutId(position: Int, obj: ExamModel): Int = R.layout.item_populer_exam
-        override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder = PopularExamVH(view)
+    }) {
+        override fun layoutId(position: Int, obj: ExamModel?): Int = R.layout.item_populer_exam
+        override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder =
+            PopularExamVH(view)
 
     }
 
@@ -63,16 +67,17 @@ class TeacherDashboardActivity : AppCompatActivity() {
             adapter = popularExamAdapter
             val layManager = LinearLayoutManager(this@TeacherDashboardActivity)
             layManager.orientation = LinearLayoutManager.VERTICAL
-            layoutManager=layManager
+            layoutManager = layManager
         }
 
         tv_ujian_populer_all.setOnClickListener {
-            startActivity(Intent(this,CategoryBankSoalActivity::class.java))
+            startActivity(Intent(this, CategoryBankSoalActivity::class.java))
 
         }
 
         myExamAdapter.notifyDataSetChanged()
-        populatePopularExam()
+        //populatePopularExam()
+        presenter.getData()
     }
 
     private fun populatePopularExam(){
@@ -168,14 +173,15 @@ class TeacherDashboardActivity : AppCompatActivity() {
 
     }
 
-    private fun rvMyExamClickHandler(data:ExamModel){
-        if(data.id=="add-control"){
-         showCreateNew()
+    private fun rvMyExamClickHandler(data: ExamModel) {
+        if (data.id == "add-control") {
+            showCreateNew()
         }
     }
-    private fun rvPopularClickHandler(data:ExamModel){
-        val intent=Intent(this,DetailBankSoalActivity::class.java)
-        intent.putExtra("data-exam",data)
+
+    private fun rvPopularClickHandler(data: ExamModel?) {
+        val intent = Intent(this, DetailBankSoalActivity::class.java)
+        intent.putExtra("data-exam", data)
         startActivity(intent)
     }
 
@@ -194,12 +200,26 @@ class TeacherDashboardActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         btnSubmit.setOnClickListener {
-            CreateExamActivity.examTitle=etJudul.text.toString()
-            CreateExamActivity.keterangan=etKeterangan.text.toString()
-            CreateExamActivity.kategori=spKategori.selectedItem.toString()
+            CreateExamActivity.examTitle = etJudul.text.toString()
+            CreateExamActivity.keterangan = etKeterangan.text.toString()
+            CreateExamActivity.kategori = spKategori.selectedItem.toString()
             dialog.dismiss()
-            startActivity(Intent(this,CreateExamActivity::class.java))
+            startActivity(Intent(this, CreateExamActivity::class.java))
         }
         dialog.show()
+    }
+
+    override fun isLoading(state: Boolean) {
+
+    }
+
+    override fun isError(msg: String) {
+        toast(msg)
+    }
+
+    override fun showResult(data: List<ExamModel?>) {
+        popularExamList.clear()
+        popularExamList.addAll(data)
+        popularExamAdapter.notifyDataSetChanged()
     }
 }

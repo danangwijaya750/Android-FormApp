@@ -1,5 +1,6 @@
 package com.dngwjy.formapp.ui.exam
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Window
 import androidx.appcompat.app.AlertDialog
@@ -13,9 +14,12 @@ import com.dngwjy.formapp.ui.exam.create.CreateQuizFragment
 import com.dngwjy.formapp.ui.exam.result.ResultQuizFragment
 import com.dngwjy.formapp.ui.exam.review.ReviewExamFragment
 import com.dngwjy.formapp.ui.exam.share.ShareExamFragment
+import com.dngwjy.formapp.util.logD
 import com.dngwjy.formapp.util.logE
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_create_exam.*
+import java.io.ByteArrayOutputStream
+
 
 class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFragmentListener,
     CreateExamView {
@@ -29,6 +33,9 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         var fragmentPosition = 0
         var startDate = ""
         var endDate = ""
+        var totalScore = 0
+        var bitmap: Bitmap? = null
+        var questionPositions = 0
     }
 
     private val presenter = CreateExamPresenter(FirebaseFirestore.getInstance(), this)
@@ -60,8 +67,8 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
 
     }
 
-    class FragmentAdapter(fm:FragmentManager):FragmentPagerAdapter(fm){
-        private val pages=listOf(
+    class FragmentAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+        private val pages = listOf(
             CreateQuizFragment.getInstance(),
             ReviewExamFragment.getInstance(),
             ShareExamFragment.getInstance(),
@@ -79,10 +86,10 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
 
     override fun onChanged() {
        when(val frag = supportFragmentManager.findFragmentById(R.id.vp_main)){
-           is ReviewExamFragment->{
+           is ReviewExamFragment -> {
                logE(frag.toString())
            }
-           else->{
+           else -> {
                logE(frag.toString())
            }
        }
@@ -93,7 +100,7 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         builder.apply {
             title="Peringatan!"
             setMessage("Anda yakin ingin keluar? semua perubahan anda akan terhapus")
-            setPositiveButton("Ya"){dialog, which ->
+            setPositiveButton("Ya") { dialog, which ->
                 dialog.dismiss()
                 questionList.clear()
                 CreateQuizFragment.questionCount = 0
@@ -107,6 +114,9 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
     }
 
     fun uploadExamData() {
+        val baos = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data: ByteArray? = baos.toByteArray()
         presenter.uploadExam(
             examTitle,
             kategori,
@@ -115,13 +125,20 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
             accessType,
             "",
             startDate,
-            endDate
+            endDate,
+            data
         )
     }
 
-    fun uploadExamQuestions(examId: String) {
-
+    private fun uploadQuestions(examId: String) {
+        if (questionPositions < questionList.size) {
+            presenter.uploadQuestion(examId, questionList[questionPositions])
+            questionPositions++
+        } else {
+            logD("Questions uploaded")
+        }
     }
+
 
     override fun isLoading(state: Boolean) {
 
@@ -132,7 +149,7 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
     }
 
     override fun showUploadExamResult(data: String) {
-        uploadExamQuestions(data)
+        uploadQuestions(data)
     }
 
 

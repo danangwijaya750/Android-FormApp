@@ -17,4 +17,6 @@ data class ExamModel(
     var puzzles: Int,
     var played: Int,
     var quizes: MutableList<QuizModel?>
-):Parcelable
+) : Parcelable {
+    constructor() : this("", "", "", "", "", 0.0, mutableListOf<String?>(), 0, 0, mutableListOf())
+}

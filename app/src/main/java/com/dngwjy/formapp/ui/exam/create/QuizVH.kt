@@ -23,19 +23,22 @@ import kotlinx.android.synthetic.main.question_layout.*
 class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(containerView)
     , LayoutContainer, RvAdapter.BinderData<QuizModel> {
     override fun bindData(data: QuizModel, listen: (QuizModel) -> Unit, position: Int) {
-        tv_question_number.text="${position+1}"
-        et_score.hint="${data.score}"
+        tv_question_number.text = "${position + 1}"
+        et_score.text = "${data.score}"
+        et_score.setOnClickListener {
+            changeScore(data, listen)
+        }
         when (data.questionType) {
             "pilgan" -> {
                 ll_isian.visibility = View.GONE
                 ll_pilgan.visibility = View.VISIBLE
-                ll_essay.visibility=View.GONE
+                ll_essay.visibility = View.GONE
                 isPilgan(data, position, listen)
             }
             "isian" -> {
                 ll_isian.visibility = View.VISIBLE
                 ll_pilgan.visibility = View.GONE
-                ll_essay.visibility=View.GONE
+                ll_essay.visibility = View.GONE
                 isIsian(data, position, listen)
             }
             "essay"->{
@@ -140,6 +143,39 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
             data.choice.add("Long press to change...")
             listen(data)
         }
+    }
+
+    private fun changeScore(data: QuizModel, listen: (QuizModel) -> Unit) {
+        val builder = AlertDialog.Builder(containerView.context)
+        val input = EditText(containerView.context)
+        val lp = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        input.layoutParams = lp
+        input.setText(data.score.toString())
+        builder.apply {
+            setTitle("Ubah Score")
+            setView(input)
+            setPositiveButton("Simpan") { dialog, which ->
+                var id = 0
+                CreateExamActivity.questionList.forEachIndexed { index, it ->
+                    if (it.id == data.id) {
+                        id = index
+                        CreateExamActivity.questionList[id].score = input.text.toString().toInt()
+                        return@forEachIndexed
+                    }
+                }
+                dialog.dismiss()
+                listen(data)
+            }
+            setNegativeButton("Batal") { dialog, which ->
+                dialog.dismiss()
+                listen(data)
+            }
+        }
+        val alert = builder.create()
+        alert.show()
     }
 
     private fun clearRg() {

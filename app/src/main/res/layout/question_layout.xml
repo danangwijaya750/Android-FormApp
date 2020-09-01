@@ -146,16 +146,14 @@
                 />
         </LinearLayout>
 
-
-        <EditText
+        <TextView
             android:id="@+id/et_score"
-            android:layout_width="30dp"
-            android:layout_height="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_attach"
-            android:background="@drawable/et_rounded"
+            android:layout_width="27dp"
+            android:layout_height="18dp"
             android:layout_marginEnd="10dp"
-            />
+            android:background="@drawable/et_rounded"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_attach" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_more"

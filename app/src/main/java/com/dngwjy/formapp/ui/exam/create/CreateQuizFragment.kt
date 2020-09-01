@@ -15,7 +15,6 @@ import com.dngwjy.formapp.data.QuizModel
 import com.dngwjy.formapp.ui.bank_soal.detail_category.DetailCategoryActivity
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
 import com.dngwjy.formapp.ui.exam.review.ReviewExamFragment
-import com.dngwjy.formapp.ui.exam.share.ShareExamFragment
 import com.dngwjy.formapp.util.logE
 import com.skydoves.balloon.ArrowOrientation
 import com.skydoves.balloon.Balloon
@@ -118,8 +117,8 @@ class CreateQuizFragment : Fragment() {
         CreateExamActivity.questionList.sortBy { it.id }
         rvAdapter.notifyDataSetChanged()
         ReviewExamFragment.rvAdapter.notifyDataSetChanged()
-        ShareExamFragment.score = CreateExamActivity.questionList.sumBy { it.score }
-        logE("Score : ${ShareExamFragment.score}")
+        CreateExamActivity.totalScore = CreateExamActivity.questionList.sumBy { it.score }
+        logE("Score : ${CreateExamActivity.totalScore}")
         callback!!.onChanged()
     }
 

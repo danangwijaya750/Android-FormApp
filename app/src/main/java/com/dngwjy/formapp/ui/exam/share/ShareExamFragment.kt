@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.dngwjy.formapp.R
@@ -27,7 +28,6 @@ class ShareExamFragment : Fragment() {
 
     companion object {
         fun getInstance(): ShareExamFragment = ShareExamFragment()
-        var score = 0
     }
 
     override fun onCreateView(
@@ -63,6 +63,28 @@ class ShareExamFragment : Fragment() {
         iv_image_exam.setOnClickListener {
             pickImage()
         }
+        sp_akses.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                CreateExamActivity.accessType = sp_akses.selectedItem.toString()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                CreateExamActivity.accessType = sp_akses.selectedItem.toString()
+            }
+
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (CreateExamActivity.bitmap != null) {
+            setImage(CreateExamActivity.bitmap)
+        }
     }
 
     private fun pickImage() {
@@ -91,6 +113,7 @@ class ShareExamFragment : Fragment() {
                 val uri = data?.data
                 val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
                 setImage(bitmap)
+                CreateExamActivity.bitmap = bitmap
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -139,6 +162,7 @@ class ShareExamFragment : Fragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
+            et_score.setText(CreateExamActivity.totalScore.toString())
             CreateExamActivity.fragmentPosition = 2
         }
     }
