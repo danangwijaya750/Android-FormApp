@@ -13,15 +13,18 @@ import com.dngwjy.formapp.data.ExamModel
 import com.dngwjy.formapp.data.QuizModel
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
 import com.dngwjy.formapp.ui.exam.create.CreateQuizFragment
+import com.dngwjy.formapp.util.logE
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_detail_bank_soal.*
 
-class DetailBankSoalActivity : AppCompatActivity() {
-    private val questions= mutableListOf<QuizModel>()
-    private val rvAdapter=object:RvAdapter<QuizModel>(questions,{})
-    {
-        override fun layoutId(position: Int, obj: QuizModel): Int = R.layout.question_view
+class DetailBankSoalActivity : AppCompatActivity(), DetailBankSoalView {
+    private val questions = mutableListOf<QuizModel?>()
+    private val presenter = DetailBankSoalPresenter(FirebaseFirestore.getInstance(), this)
+    private val rvAdapter = object : RvAdapter<QuizModel?>(questions, {}) {
+        override fun layoutId(position: Int, obj: QuizModel?): Int = R.layout.question_view
 
-        override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder = QuestionViewVH(view)
+        override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder =
+            QuestionViewVH(view)
 
     }
 
@@ -53,16 +56,13 @@ class DetailBankSoalActivity : AppCompatActivity() {
         tv_category.text = data.category
         tv_subtitle.text = data.desc
         questions.clear()
-        data.quizes.forEach {
-            questions.add(it!!)
-        }
-        rvAdapter.notifyDataSetChanged()
+        presenter.getData(data.id)
 
         ll_edit.setOnClickListener {
             CreateExamActivity.examTitle = data.title
             CreateExamActivity.kategori = data.category
             CreateExamActivity.keterangan = data.desc
-            data.quizes.forEach {
+            questions.forEach {
                 CreateExamActivity.questionList.add(it!!)
                 CreateQuizFragment.questionCount++
             }
@@ -75,6 +75,20 @@ class DetailBankSoalActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+    }
+
+    override fun onLoading(state: Boolean) {
+
+    }
+
+    override fun onError(msg: String) {
+        logE(msg)
+    }
+
+    override fun showResult(result: List<QuizModel?>) {
+        questions.clear()
+        questions.addAll(result)
+        rvAdapter.notifyDataSetChanged()
     }
 
 }

@@ -12,19 +12,19 @@ import com.dngwjy.formapp.data.QuizModel
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.question_view.*
 
-class QuestionViewVH (override val containerView: View): RecyclerView.ViewHolder(containerView)
-    , LayoutContainer, RvAdapter.BinderData<QuizModel>{
-    override fun bindData(data: QuizModel, listen: (QuizModel) -> Unit, position: Int) {
-        tv_question_number.text="${position+1}"
-        when(data.questionType){
-            "pilgan"->{
-                ll_pilgan.visibility=View.VISIBLE
-                ll_isian.visibility=View.GONE
+class QuestionViewVH(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+    LayoutContainer, RvAdapter.BinderData<QuizModel?> {
+    override fun bindData(data: QuizModel?, listen: (QuizModel?) -> Unit, position: Int) {
+        tv_question_number.text = "${position + 1}"
+        when (data!!.questionType) {
+            "pilgan" -> {
+                ll_pilgan.visibility = View.VISIBLE
+                ll_isian.visibility = View.GONE
                 isPilgan(data, position, listen)
             }
-            "isian"->{
-                ll_pilgan.visibility=View.GONE
-                ll_isian.visibility=View.VISIBLE
+            "isian" -> {
+                ll_pilgan.visibility = View.GONE
+                ll_isian.visibility = View.VISIBLE
                 isIsian(data, position, listen)
             }
         }

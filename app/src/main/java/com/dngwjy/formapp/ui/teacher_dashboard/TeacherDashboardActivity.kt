@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
 import com.dngwjy.formapp.data.ExamModel
-import com.dngwjy.formapp.data.QuizModel
 import com.dngwjy.formapp.ui.bank_soal.category.CategoryBankSoalActivity
 import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
@@ -54,7 +53,7 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
         myExamList.add(
             0, ExamModel(
                 "add-control", "", "", "", "", 0.0, mutableListOf(), 0, 0,
-                mutableListOf()
+                mutableListOf(), "", "", "", ""
             )
         )
         rv_ujian_anda.apply {
@@ -78,99 +77,6 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
         myExamAdapter.notifyDataSetChanged()
         //populatePopularExam()
         presenter.getData()
-    }
-
-    private fun populatePopularExam(){
-        popularExamList.add(
-            ExamModel(
-                "1",
-                "",
-                "Makhluk Hidup",
-                "ini ujian",
-                "Ilmu Pengetahuan Alam",
-                4.8,
-                mutableListOf("#hewan", "#tumbuhan", "#tubuh"),
-                50,
-                80,
-                mutableListOf(
-                    QuizModel(
-                        1,
-                        "Paus termasuk hewan ...",
-                        mutableListOf("Reptil", "Mamalia", "Insekta", "Unggas"),
-                        "pilgan",
-                        "Mamalia",
-                        10
-                    ),
-                    QuizModel(
-                        2, "Kambing pemakan rumput, disebut ...",
-                        mutableListOf(
-                            "Karnivora", "Omnivora", "Herbivora"
-                        ), "pilgan", "Herbivora", 10
-                    ),
-                    QuizModel(
-                        3, "Jumlah kaki Hiu adalah ...",
-                        mutableListOf(), "isian", "0", 10
-                    )
-                )
-            )
-        )
-        popularExamList.add(
-            ExamModel(
-                "2",
-                "",
-                "Interaksi Sosial",
-                "ini ujian",
-                "Ilmu Pengetahuan Sosial",
-                4.2,
-                mutableListOf("#interaksi", "#keragaman"),
-                38,
-                80,
-                mutableListOf()
-            )
-        )
-        popularExamList.add(
-            ExamModel(
-                "3",
-                "",
-                "Penjumlahan",
-                "ini ujian",
-                "Matematika",
-                4.5,
-                mutableListOf("#jumlah", "#tambah", "#matematika"),
-                48,
-                60,
-                mutableListOf()
-            )
-        )
-        popularExamList.add(
-            ExamModel(
-                "4",
-                "",
-                "Pantun",
-                "ini ujian",
-                "Bahasa Indonesia",
-                4.7,
-                mutableListOf("#pantun", "#bindo", "#sajak"),
-                41,
-                76,
-                mutableListOf()
-            )
-        )
-        popularExamList.add(
-            ExamModel(
-                "5",
-                "",
-                "Cerpen",
-                "ini ujian",
-                "Bahasa Indonesia",
-                4.4,
-                mutableListOf("#cerita", "#pendek"),
-                53,
-                84,
-                mutableListOf()
-            )
-        )
-
     }
 
     private fun rvMyExamClickHandler(data: ExamModel) {

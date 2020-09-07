@@ -16,7 +16,26 @@ data class ExamModel(
     var tags: MutableList<String?>,
     var puzzles: Int,
     var played: Int,
-    var quizes: MutableList<QuizModel?>
+    var quizes: MutableList<QuizModel?>,
+    var accessCode: String,
+    var accessType: String,
+    var endDate: String,
+    var startDate: String
 ) : Parcelable {
-    constructor() : this("", "", "", "", "", 0.0, mutableListOf<String?>(), 0, 0, mutableListOf())
+    constructor() : this(
+        "",
+        "",
+        "",
+        "",
+        "",
+        0.0,
+        mutableListOf<String?>(),
+        0,
+        0,
+        mutableListOf(),
+        "",
+        "",
+        "",
+        ""
+    )
 }
