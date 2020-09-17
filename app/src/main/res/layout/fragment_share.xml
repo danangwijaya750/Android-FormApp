@@ -8,10 +8,13 @@
         android:id="@+id/ll_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:paddingBottom="20dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -241,7 +244,17 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:paddingBottom="20dp"
             android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="0dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/iv_cicle5"
+                app:layout_constraintEnd_toEndOf="@id/iv_cicle5"
+                app:layout_constraintStart_toStartOf="@id/iv_cicle5"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.rishabhharit.roundedimageview.RoundedImageView
                 android:id="@+id/iv_cicle5"

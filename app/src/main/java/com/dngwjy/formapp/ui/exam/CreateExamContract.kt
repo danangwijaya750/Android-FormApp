@@ -60,10 +60,18 @@ class CreateExamPresenter(private val db: FirebaseFirestore, private val view: C
     }
 
     private fun updateImageUrl(idExam: String) {
+        var url = when (idExam[0]) {
+            '9' -> {
+                "https://firebasestorage.googleapis.com/v0/b/formforexam-670e3.appspot.com/o/images%2F${idExam}.jpg?alt=media"
+            }
+            else -> {
+                "https://firebasestorage.googleapis.com/v0/b/formforexam-670e3.appspot.com/o/images%2F9${idExam}.jpg?alt=media"
+            }
+        }
         db.collection("col_exam").document(idExam)
             .update(
                 "image",
-                "https://firebasestorage.googleapis.com/v0/b/formforexam-670e3.appspot.com/o/images%2F9${idExam}.jpg?alt=media"
+                url
             )
             .addOnSuccessListener {
                 view.showUploadExamResult(idExam)

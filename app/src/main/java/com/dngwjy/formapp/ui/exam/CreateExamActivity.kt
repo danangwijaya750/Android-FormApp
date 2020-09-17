@@ -2,6 +2,7 @@ package com.dngwjy.formapp.ui.exam
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import com.dngwjy.formapp.ui.exam.review.ReviewExamFragment
 import com.dngwjy.formapp.ui.exam.share.ShareExamFragment
 import com.dngwjy.formapp.util.logD
 import com.dngwjy.formapp.util.logE
+import com.dngwjy.formapp.util.toast
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_create_exam.*
 import java.io.ByteArrayOutputStream
@@ -103,6 +105,7 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
             setPositiveButton("Ya") { dialog, which ->
                 dialog.dismiss()
                 questionList.clear()
+                bitmap = null
                 CreateQuizFragment.questionCount = 0
                 super.onBackPressed()
                 finish()
@@ -136,16 +139,21 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
             questionPositions++
         } else {
             logD("Questions uploaded")
+            isLoading(false)
+            toast("Ujian Berhasil Dibuat!")
         }
     }
 
 
     override fun isLoading(state: Boolean) {
-
+        when (state) {
+            true -> pg_loading.visibility = View.VISIBLE
+            else -> pg_loading.visibility = View.GONE
+        }
     }
 
     override fun isError(msg: String) {
-
+        toast("Terjadi Error : $msg")
     }
 
     override fun showUploadExamResult(data: String) {

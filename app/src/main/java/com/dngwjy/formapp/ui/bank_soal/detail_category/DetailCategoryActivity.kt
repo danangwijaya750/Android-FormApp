@@ -1,5 +1,6 @@
 package com.dngwjy.formapp.ui.bank_soal.detail_category
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.Window
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
 import com.dngwjy.formapp.data.ExamModel
+import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_detail_category.*
 
@@ -17,12 +19,18 @@ class DetailCategoryActivity : AppCompatActivity(), DetailCategoryView {
     private val presenter = DetailCategoryPresenter(FirebaseFirestore.getInstance(), this)
     private val listExam = mutableListOf<ExamModel?>()
     private val rvAdapter = object : RvAdapter<ExamModel?>(listExam, {
-
+        handleClick(it)
     }) {
         override fun layoutId(position: Int, obj: ExamModel?): Int = R.layout.item_exam
 
         override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder = ExamVH(view)
 
+    }
+
+    private fun handleClick(data: ExamModel?) {
+        val intent = Intent(this, DetailBankSoalActivity::class.java)
+        intent.putExtra("data-exam", data)
+        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +39,7 @@ class DetailCategoryActivity : AppCompatActivity(), DetailCategoryView {
         setContentView(R.layout.activity_detail_category)
         supportActionBar?.hide()
         val category = intent.getStringExtra("category")
-        tv_category_title.text=category
+        tv_category_title.text = category
         rv_exam.apply {
             adapter = rvAdapter
             val layManager = GridLayoutManager(this@DetailCategoryActivity, 2)

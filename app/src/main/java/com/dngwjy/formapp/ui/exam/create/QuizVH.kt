@@ -1,12 +1,13 @@
 package com.dngwjy.formapp.ui.exam.create
 
 import android.app.AlertDialog
-import android.content.res.ColorStateList
+import android.text.InputType
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
@@ -105,39 +106,60 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
 
         clearRg()
         data.choice.forEachIndexed { index, value ->
-            val rdBtn = RadioButton(containerView.context)
-            val params =RadioGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
-            params.setMargins(2,10,2,10)
-            rdBtn.layoutParams= params
-            rdBtn.setPadding(10,10,10,10)
-            rdBtn.id = View.generateViewId()
-            rdBtn.text = value
-            rdBtn.textSize = 20f
-            //rdBtn.setTextColor(containerView.context.resources.getColor(R.color.rb_selector))
-            rdBtn.setOnLongClickListener {
-                changeOption(index, value, position, data, listen)
-                true
-            }
-            rdBtn.setOnClickListener {
-                changeAnswer(index, value, position, data, listen)
-            }
-            rdBtn.background=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
-            rdBtn.buttonDrawable=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
-            val states = arrayOf(
-                intArrayOf(android.R.attr.state_checked),
-                intArrayOf(-android.R.attr.state_checked)
+            val rdBtn = EditText(containerView.context)
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
             )
+            params.setMargins(2, 10, 2, 10)
+            rdBtn.run {
+                params.setMargins(2, 10, 2, 10)
+                layoutParams = params
+                setPadding(10, 10, 10, 10)
+                id = View.generateViewId()
+                setText(value)
+                textSize = 18f
+                inputType = InputType.TYPE_CLASS_TEXT
+                imeOptions = EditorInfo.IME_ACTION_DONE
+                setOnEditorActionListener(object : TextView.OnEditorActionListener {
+                    override fun onEditorAction(
+                        v: TextView?,
+                        actionId: Int,
+                        event: KeyEvent?
+                    ): Boolean {
+                        if (actionId == EditorInfo.IME_ACTION_DONE) {
+                            changging(index, text.toString(), position, data, listen)
+                            return true
+                        }
+                        return false
+                    }
+                })
+            }
+//            rdBtn.setOnClickListener {
+//                changeAnswer(index, value, position, data, listen)
+//            }
 
-            val colors = intArrayOf(
-                containerView.context.resources.getColor(R.color.colorWhite),
-                containerView.context.resources.getColor(R.color.colorPrimary)
-            )
-            val myList = ColorStateList(states, colors)
-            rdBtn.setTextColor(myList)
-            if (data.answer == value) rdBtn.isChecked = true
+            //rdBtn.background=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
+//            val states = arrayOf(
+//                intArrayOf(android.R.attr.state_checked),
+//                intArrayOf(-android.R.attr.state_checked)
+//            )
+//
+//            val colors = intArrayOf(
+//                containerView.context.resources.getColor(R.color.colorWhite),
+//                containerView.context.resources.getColor(R.color.colorPrimary)
+//            )
+//            val myList = ColorStateList(states, colors)
+//            rdBtn.setTextColor(myList)
+//            if (data.answer == value){
+//
+//            }
+//            else{
+//
+//            }
 
 
-            rg_option.addView(rdBtn)
+            ll_option.addView(rdBtn)
         }
         tv_add_choice.setOnClickListener {
             data.choice.add("Long press to change...")
@@ -179,15 +201,14 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
     }
 
     private fun clearRg() {
-        val count: Int = rg_option.childCount
-        if (count > 0) {
-            for (i in count - 1 downTo 0) {
-                val o: View = rg_option.getChildAt(i)
-                if (o is RadioButton) {
-                    rg_option.removeViewAt(i)
-                }
-            }
-        }
+//        val count: Int = ll_option.childCount
+//        if (count > 0) {
+//            for (i in count - 1 downTo 0) {
+//                ll_option.remov
+//
+//            }
+//        }
+        ll_option.removeAllViewsInLayout()
     }
 
     private fun changeQuestion(data: QuizModel, listen: (QuizModel) -> Unit) {
@@ -223,6 +244,24 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
         val alert = builder.create()
         alert.show()
 
+    }
+
+    private fun changging(
+        index: Int,
+        value: String,
+        position: Int,
+        data: QuizModel,
+        listen: (QuizModel) -> Unit
+    ) {
+        var id = 0
+        CreateExamActivity.questionList.forEachIndexed { idx, it ->
+            if (it.id == data.id) {
+                id = idx
+                CreateExamActivity.questionList[id].choice[index] = value.toString()
+                return@forEachIndexed
+            }
+        }
+        listen(data)
     }
 
 
