@@ -1,4 +1,4 @@
-package com.dngwjy.formapp.data
+package com.dngwjy.formapp.data.model
 
 import android.os.Parcelable
 import com.google.firebase.firestore.DocumentId

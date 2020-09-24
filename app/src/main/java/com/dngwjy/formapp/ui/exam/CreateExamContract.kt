@@ -1,6 +1,6 @@
 package com.dngwjy.formapp.ui.exam
 
-import com.dngwjy.formapp.data.QuizModel
+import com.dngwjy.formapp.data.model.QuizModel
 import com.dngwjy.formapp.util.logE
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage

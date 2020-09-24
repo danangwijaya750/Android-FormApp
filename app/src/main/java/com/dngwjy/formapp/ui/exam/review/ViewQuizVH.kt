@@ -8,7 +8,7 @@ import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
-import com.dngwjy.formapp.data.QuizModel
+import com.dngwjy.formapp.data.model.QuizModel
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.question_view_layout.*
 
@@ -30,17 +30,20 @@ class ViewQuizVH (override val containerView: View): RecyclerView.ViewHolder(con
         }
     }
 
-    private fun isPilgan(data: QuizModel,position: Int, listen: (QuizModel) -> Unit){
-        tv_pilgan_question.text=data.question
+    private fun isPilgan(data: QuizModel, position: Int, listen: (QuizModel) -> Unit) {
+        tv_pilgan_question.text = data.question
         clearRg()
-        data.choice.forEachIndexed {index, value->
-            val rdBtn=RadioButton(containerView.context)
+        data.choice.forEachIndexed { index, value ->
+            val rdBtn = RadioButton(containerView.context)
             val params =
-                RadioGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            params.setMargins(2,10,2,10)
+                RadioGroup.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            params.setMargins(2, 10, 2, 10)
             rdBtn.layoutParams = params
             rdBtn.textSize = 20f
-            rdBtn.setPadding(10,10,10,10)
+            rdBtn.setPadding(10, 10, 10, 10)
             rdBtn.id=View.generateViewId()
             rdBtn.background=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
             rdBtn.buttonDrawable=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
@@ -73,8 +76,9 @@ class ViewQuizVH (override val containerView: View): RecyclerView.ViewHolder(con
             }
         }
     }
-    private fun isIsian(data: QuizModel,position: Int, listen: (QuizModel) -> Unit){
-        tv_isian_question.text=data.question
+
+    private fun isIsian(data: QuizModel, position: Int, listen: (QuizModel) -> Unit) {
+        tv_isian_question.text = data.question
     }
 
 }

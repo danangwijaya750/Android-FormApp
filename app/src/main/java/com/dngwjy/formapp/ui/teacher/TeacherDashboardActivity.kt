@@ -1,4 +1,4 @@
-package com.dngwjy.formapp.ui.teacher_dashboard
+package com.dngwjy.formapp.ui.teacher
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,11 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
-import com.dngwjy.formapp.data.ExamModel
+import com.dngwjy.formapp.data.model.ExamModel
+import com.dngwjy.formapp.ui.auth.login.LoginActivity
 import com.dngwjy.formapp.ui.bank_soal.category.CategoryBankSoalActivity
 import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
 import com.dngwjy.formapp.util.toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_teacher_dashboard.*
 
@@ -27,6 +29,7 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
     val myExamList = mutableListOf<ExamModel>()
     val popularExamList = mutableListOf<ExamModel?>()
     private val presenter = TeacherDashboardPresenter(FirebaseFirestore.getInstance(), this)
+    private val fAuth = FirebaseAuth.getInstance()
 
     private val myExamAdapter = object : RvAdapter<ExamModel>(myExamList, {
         rvMyExamClickHandler(it)
@@ -81,7 +84,11 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
 
     private fun rvMyExamClickHandler(data: ExamModel) {
         if (data.id == "add-control") {
-            showCreateNew()
+            if (fAuth.currentUser != null) {
+                showCreateNew()
+            } else {
+                showNotLogged()
+            }
         }
     }
 
@@ -111,6 +118,24 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
             CreateExamActivity.kategori = spKategori.selectedItem.toString()
             dialog.dismiss()
             startActivity(Intent(this, CreateExamActivity::class.java))
+        }
+        dialog.show()
+    }
+
+    private fun showNotLogged() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        val alertLayout = layoutInflater.inflate(R.layout.layout_not_logged_dialog, null)
+        alertDialogBuilder.setView(alertLayout)
+        alertDialogBuilder.setCancelable(false)
+        val btnCancel = alertLayout.findViewById<ImageView>(R.id.btn_close)
+        val btnSubmit = alertLayout.findViewById<Button>(R.id.btn_login_dialog)
+        val dialog = alertDialogBuilder.create()
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        btnSubmit.setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, LoginActivity::class.java))
         }
         dialog.show()
     }

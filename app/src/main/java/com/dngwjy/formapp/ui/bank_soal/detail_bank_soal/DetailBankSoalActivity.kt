@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
-import com.dngwjy.formapp.data.ExamModel
-import com.dngwjy.formapp.data.QuizModel
+import com.dngwjy.formapp.data.model.ExamModel
+import com.dngwjy.formapp.data.model.QuizModel
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
 import com.dngwjy.formapp.ui.exam.create.CreateQuizFragment
 import com.dngwjy.formapp.util.logE

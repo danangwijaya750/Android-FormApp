@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
-import com.dngwjy.formapp.data.QuizModel
+import com.dngwjy.formapp.data.model.QuizModel
 import com.dngwjy.formapp.ui.bank_soal.detail_category.DetailCategoryActivity
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
 import com.dngwjy.formapp.ui.exam.review.ReviewExamFragment
@@ -94,7 +94,7 @@ class CreateQuizFragment : Fragment() {
             }
         ballon.getContentView().findViewById<LinearLayout>(R.id.ll_isian)
             .setOnClickListener {
-                addQuestions("isian")
+                //addQuestions("isian")
                 ballon.dismiss()
             }
         ballon.getContentView().findViewById<LinearLayout>(R.id.ll_import)

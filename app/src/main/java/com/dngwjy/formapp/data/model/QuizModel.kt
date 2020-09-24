@@ -1,4 +1,4 @@
-package com.dngwjy.formapp.data
+package com.dngwjy.formapp.data.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:layout_height="600dp"
     android:layout_marginBottom="10dp"
-    android:paddingBottom="20dp"
-    android:layout_height="540dp">
+    android:paddingBottom="20dp">
 
     <ImageView
         android:id="@+id/btn_close"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="80dp"
-        android:text="Buat Quiz Baru"
+        android:text="Harap Masuk"
         android:textColor="@color/colorPrimary"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -38,65 +38,46 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
+        android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title">
 
-        <EditText
-            android:id="@+id/et_judul"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/bg_rounded"
-            android:backgroundTint="#E7E7F4"
-            android:hint="Judul" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:src="@drawable/ic_rocket" />
 
-        <Spinner
-            android:id="@+id/sp_kategori"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/bg_rounded"
-            android:backgroundTint="#E7E7F4"
-            android:entries="@array/kategori" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="Silahkan login terlebih dahulu untuk \n melanjutkan membuat soal"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
 
-        <EditText
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:id="@+id/et_keterangan"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/bg_rounded"
-            android:backgroundTint="#E7E7F4"
-            android:gravity="top|left"
-            android:hint="Keterangan"
-            android:inputType="textMultiLine" />
+
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_submit"
+        android:id="@+id/btn_login_dialog"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="30dp"
-        android:textSize="18sp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
         android:background="@drawable/bg_rounded"
-        android:text="Buat"
+        android:text="Masuk"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_container" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

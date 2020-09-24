@@ -1,11 +1,11 @@
-package com.dngwjy.formapp.ui.teacher_dashboard
+package com.dngwjy.formapp.ui.teacher
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
-import com.dngwjy.formapp.data.ExamModel
+import com.dngwjy.formapp.data.model.ExamModel
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_my_exam.*
 

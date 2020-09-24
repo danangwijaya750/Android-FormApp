@@ -1,6 +1,6 @@
 package com.dngwjy.formapp.ui.bank_soal.detail_category
 
-import com.dngwjy.formapp.data.ExamModel
+import com.dngwjy.formapp.data.model.ExamModel
 import com.dngwjy.formapp.util.logE
 import com.google.firebase.firestore.FirebaseFirestore
 

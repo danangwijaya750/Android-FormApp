@@ -1,6 +1,6 @@
-package com.dngwjy.formapp.ui.teacher_dashboard
+package com.dngwjy.formapp.ui.teacher
 
-import com.dngwjy.formapp.data.ExamModel
+import com.dngwjy.formapp.data.model.ExamModel
 import com.dngwjy.formapp.util.logE
 import com.google.firebase.firestore.FirebaseFirestore
 

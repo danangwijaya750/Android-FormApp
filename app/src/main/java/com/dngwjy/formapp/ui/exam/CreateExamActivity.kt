@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.dngwjy.formapp.R
-import com.dngwjy.formapp.data.QuizModel
+import com.dngwjy.formapp.data.model.QuizModel
 import com.dngwjy.formapp.ui.exam.create.CreateQuizFragment
 import com.dngwjy.formapp.ui.exam.result.ResultQuizFragment
 import com.dngwjy.formapp.ui.exam.review.ReviewExamFragment
