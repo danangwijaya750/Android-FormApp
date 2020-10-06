@@ -29,12 +29,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Masuk"
             android:layout_marginStart="10dp"
+            android:text="Masuk"
             android:textColor="@android:color/white"
             android:textSize="28sp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_back"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/iv_back"
             app:layout_constraintStart_toEndOf="@id/iv_back"
             app:layout_constraintTop_toTopOf="@id/iv_back" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -50,20 +50,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_header">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_email"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
+            android:layout_height="65dp"
             android:background="@drawable/et_rounded"
-            android:inputType="textEmailAddress" />
+            android:hint="Email"
+            android:layout_marginBottom="10dp">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_password"
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/et_rounded_white"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="65dp"
+            app:passwordToggleEnabled="true"
             android:background="@drawable/et_rounded"
-            android:inputType="textPassword" />
+            android:hint="Password"
+            android:paddingBottom="5dp"
+            android:layout_marginBottom="10dp">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_password"
+                android:paddingStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/et_rounded_white"
+                android:layout_margin="5dp"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -115,4 +136,14 @@
             app:layout_constraintStart_toStartOf="parent" />
 
     </LinearLayout>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pg_loading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

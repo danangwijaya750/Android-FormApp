@@ -7,10 +7,12 @@
     android:background="@drawable/bg_item"
     >
 
-    <ImageView
+    <com.rishabhharit.roundedimageview.RoundedImageView
         android:id="@+id/iv_exam_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:cornerRadius="10dp"
+        app:roundedCorners="all"
         android:scaleType="center"
         android:src="@drawable/ic_baseline_add_circle_24" />
 

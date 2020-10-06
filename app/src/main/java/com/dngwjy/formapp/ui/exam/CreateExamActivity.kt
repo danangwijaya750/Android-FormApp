@@ -1,16 +1,22 @@
 package com.dngwjy.formapp.ui.exam
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import android.view.Window
+import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.dngwjy.formapp.R
+import com.dngwjy.formapp.data.local.SharedPref
 import com.dngwjy.formapp.data.model.QuizModel
+import com.dngwjy.formapp.ui.auth.login.LoginActivity
+import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
 import com.dngwjy.formapp.ui.exam.create.CreateQuizFragment
 import com.dngwjy.formapp.ui.exam.result.ResultQuizFragment
 import com.dngwjy.formapp.ui.exam.review.ReviewExamFragment
@@ -18,6 +24,7 @@ import com.dngwjy.formapp.ui.exam.share.ShareExamFragment
 import com.dngwjy.formapp.util.logD
 import com.dngwjy.formapp.util.logE
 import com.dngwjy.formapp.util.toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_create_exam.*
 import java.io.ByteArrayOutputStream
@@ -38,9 +45,11 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         var totalScore = 0
         var bitmap: Bitmap? = null
         var questionPositions = 0
+        var tags= mutableListOf<String>()
     }
 
     private val presenter = CreateExamPresenter(FirebaseFirestore.getInstance(), this)
+    private val fAuth= FirebaseAuth.getInstance()
 
     override fun onAttachFragment(fragment: Fragment) {
         if(fragment is CreateQuizFragment){
@@ -129,7 +138,10 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
             "",
             startDate,
             endDate,
-            data
+            data,
+            fAuth.currentUser!!.uid,
+            SharedPref(this).userClass,
+            tags
         )
     }
 
@@ -140,8 +152,27 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         } else {
             logD("Questions uploaded")
             isLoading(false)
-            toast("Ujian Berhasil Dibuat!")
+            showMessage(examId)
         }
+    }
+    private fun showMessage(examId:String){
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        val alertLayout = layoutInflater.inflate(R.layout.layout_succes_upload, null)
+        alertDialogBuilder.setView(alertLayout)
+        alertDialogBuilder.setCancelable(false)
+        val btnCancel = alertLayout.findViewById<ImageView>(R.id.btn_close)
+        val btnSubmit = alertLayout.findViewById<Button>(R.id.btn_success_dialog)
+        val dialog = alertDialogBuilder.create()
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        btnSubmit.setOnClickListener {
+            dialog.dismiss()
+            val callIntent=Intent(this, DetailBankSoalActivity::class.java)
+            callIntent.putExtra("exam-id",examId)
+            startActivity(callIntent)
+        }
+        dialog.show()
     }
 
 

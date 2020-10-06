@@ -28,9 +28,12 @@ class DetailCategoryActivity : AppCompatActivity(), DetailCategoryView {
     }
 
     private fun handleClick(data: ExamModel?) {
-        val intent = Intent(this, DetailBankSoalActivity::class.java)
-        intent.putExtra("data-exam", data)
-        startActivity(intent)
+        val openIntent = Intent(this, DetailBankSoalActivity::class.java)
+        openIntent.putExtra("data-exam", data)
+        startActivity(openIntent)
+        if(intent.hasExtra("caller")){
+            finish()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

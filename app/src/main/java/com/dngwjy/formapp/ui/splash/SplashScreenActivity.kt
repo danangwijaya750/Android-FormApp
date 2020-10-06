@@ -23,12 +23,11 @@ class SplashScreenActivity : AppCompatActivity() {
 
     private fun doSplash() {
         handler?.postDelayed({
-            val role = SharedPref(this).userRole
-            when (role) {
-                "guru" -> {
+            when (SharedPref(this).userRole) {
+                "teacher" -> {
                     startActivity(Intent(this, TeacherDashboardActivity::class.java))
                 }
-                "siswa" -> {
+                "student" -> {
                     startActivity(Intent(this, StudentDashboardActivity::class.java))
                 }
                 else -> {

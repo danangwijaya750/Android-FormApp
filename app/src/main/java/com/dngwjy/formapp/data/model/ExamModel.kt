@@ -20,7 +20,9 @@ data class ExamModel(
     var accessCode: String,
     var accessType: String,
     var endDate: String,
-    var startDate: String
+    var startDate: String,
+    var kelas:String,
+    var uid:String
 ) : Parcelable {
     constructor() : this(
         "",
@@ -33,6 +35,8 @@ data class ExamModel(
         0,
         0,
         mutableListOf(),
+        "",
+        "",
         "",
         "",
         "",

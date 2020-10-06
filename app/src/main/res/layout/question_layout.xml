@@ -38,12 +38,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_question_number"
             app:layout_constraintTop_toTopOf="parent">
-
 
             <TextView
                 android:id="@+id/et_pilgan_question"
@@ -145,6 +145,20 @@
                 android:background="@drawable/et_rounded"
                 />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/bt_kunci"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="Kunci Jawaban"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:background="@drawable/bt_rounded_blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_question_number"
+            />
 
         <TextView
             android:id="@+id/et_score"

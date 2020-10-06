@@ -15,7 +15,7 @@ inline fun <reified T> T.logD(msg: String?){
 }
 
 fun Context.toast(msg:String?)=msg.let {
-    Toast.makeText(this,it,Toast.LENGTH_SHORT)
+    Toast.makeText(this,it,Toast.LENGTH_SHORT).show()
 }
 
 inline fun<reified T> T.convertDate(milis:Long,dateFormat:String):String{

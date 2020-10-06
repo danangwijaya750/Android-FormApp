@@ -50,32 +50,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_header">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_name"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
+            android:layout_height="65dp"
             android:background="@drawable/et_rounded"
-            android:inputType="textPersonName" />
+            android:hint="Nama"
+            android:layout_marginBottom="10dp">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_email"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/et_rounded"
-            android:inputType="textEmailAddress" />
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/et_rounded_white"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_password"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
+            android:layout_height="65dp"
             android:background="@drawable/et_rounded"
-            android:inputType="textPassword" />
+            android:hint="Email"
+            android:layout_marginBottom="10dp">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/et_rounded_white"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            app:passwordToggleEnabled="true"
+            android:background="@drawable/et_rounded"
+            android:hint="Password"
+            android:paddingBottom="5dp"
+            android:layout_marginBottom="10dp">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_password"
+                android:paddingStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/et_rounded_white"
+                android:layout_margin="5dp"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:id="@+id/sp_kelase"
+            android:entries="@array/kelas"
+            android:layout_margin="5dp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/et_rounded" />
@@ -134,7 +167,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="60dp"
         android:background="@drawable/bg_rounded"
         android:text="Daftar"
         android:textAllCaps="false"
@@ -177,4 +210,14 @@
             app:layout_constraintStart_toStartOf="parent" />
 
     </LinearLayout>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pg_loading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

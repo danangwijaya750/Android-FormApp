@@ -22,8 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="80dp"
-        android:text="Harap Masuk"
+        android:text=""
         android:textColor="@color/colorPrimary"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -48,30 +47,41 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="35dp"
-            android:src="@drawable/rocket" />
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_succes_upload" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="center"
-            android:text="Silahkan login terlebih dahulu untuk \n melanjutkan membuat soal"
+            android:text="Sukses!"
+            android:textStyle="bold"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
+            android:textSize="25sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="Soal yang anda buat telah\nberhasil di upload "
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
             android:textSize="18sp" />
-
-
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_login_dialog"
-        android:layout_width="match_parent"
+        android:id="@+id/btn_success_dialog"
+        android:layout_width="wrap_content"
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
         android:background="@drawable/bg_rounded"
-        android:text="Masuk"
+        android:text="Lihat"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="18sp"

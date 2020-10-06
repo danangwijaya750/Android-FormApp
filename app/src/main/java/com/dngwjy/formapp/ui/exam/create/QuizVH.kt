@@ -29,6 +29,30 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
         et_score.setOnClickListener {
             changeScore(data, listen)
         }
+        bt_kunci.setOnClickListener {
+            val builder = AlertDialog.Builder(containerView.context)
+            val input = EditText(containerView.context)
+            val lp = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
+            input.layoutParams = lp
+            input.setText(data.answer)
+            builder.apply {
+                setTitle("Ubah Kunci Jawaban")
+                setView(input)
+                setPositiveButton("Simpan") { dialog, which ->
+                    changeAnswer(input.text.toString(),data, listen)
+                    dialog.dismiss()
+                }
+                setNegativeButton("Batal") { dialog, which ->
+                    dialog.dismiss()
+                    listen(data)
+                }
+            }
+            val alert = builder.create()
+            alert.show()
+        }
         when (data.questionType) {
             "pilgan" -> {
                 ll_isian.visibility = View.GONE
@@ -162,7 +186,7 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
             ll_option.addView(rdBtn)
         }
         tv_add_choice.setOnClickListener {
-            data.choice.add("Long press to change...")
+            data.choice.add("Pilihan Jawaban")
             listen(data)
         }
     }
@@ -305,9 +329,7 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
     }
 
     private fun changeAnswer(
-        index: Int,
         value: String,
-        position: Int,
         data: QuizModel,
         listen: (QuizModel) -> Unit
     ) {
@@ -319,6 +341,7 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
                 return@forEachIndexed
             }
         }
+        listen(data)
         logE("data ${CreateExamActivity.questionList[id].answer}")
     }
 

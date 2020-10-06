@@ -22,26 +22,41 @@
 
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_register"
+                android:id="@+id/btn_login"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bt_rounded"
-                android:text="Register"
+                android:text="Masuk"
+                android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_login"
+                android:id="@+id/btn_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bt_rounded"
+                android:text="Logout"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_register"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/bt_transparent"
                 android:text="Register"
+                android:textAllCaps="false"
                 android:textColor="#fff"
-                app:layout_constraintEnd_toStartOf="@id/btn_register"
+                app:layout_constraintEnd_toStartOf="@id/btn_login"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView

@@ -4,37 +4,41 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.Window
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Spinner
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
+import com.dngwjy.formapp.data.local.SharedPref
 import com.dngwjy.formapp.data.model.ExamModel
 import com.dngwjy.formapp.ui.auth.login.LoginActivity
+import com.dngwjy.formapp.ui.auth.sign_up.SignUpActivity
 import com.dngwjy.formapp.ui.bank_soal.category.CategoryBankSoalActivity
 import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
+import com.dngwjy.formapp.util.logE
 import com.dngwjy.formapp.util.toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.skydoves.balloon.ArrowOrientation
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
 import kotlinx.android.synthetic.main.activity_teacher_dashboard.*
 
 class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
 
-    val myExamList = mutableListOf<ExamModel>()
+    val myExamList = mutableListOf<ExamModel?>()
     val popularExamList = mutableListOf<ExamModel?>()
-    private val presenter = TeacherDashboardPresenter(FirebaseFirestore.getInstance(), this)
+    private val db = FirebaseFirestore.getInstance()
+    private val presenter = TeacherDashboardPresenter(db, this)
     private val fAuth = FirebaseAuth.getInstance()
 
-    private val myExamAdapter = object : RvAdapter<ExamModel>(myExamList, {
+    private val myExamAdapter = object : RvAdapter<ExamModel?>(myExamList, {
         rvMyExamClickHandler(it)
     }) {
-        override fun layoutId(position: Int, obj: ExamModel): Int = R.layout.item_my_exam
+        override fun layoutId(position: Int, obj: ExamModel?): Int = R.layout.item_my_exam
         override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder = MyExamVH(view)
 
     }
@@ -56,7 +60,7 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
         myExamList.add(
             0, ExamModel(
                 "add-control", "", "", "", "", 0.0, mutableListOf(), 0, 0,
-                mutableListOf(), "", "", "", ""
+                mutableListOf(), "", "", "", "", "", ""
             )
         )
         rv_ujian_anda.apply {
@@ -76,14 +80,68 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
             startActivity(Intent(this, CategoryBankSoalActivity::class.java))
 
         }
+        btn_login.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+        btn_register.setOnClickListener {
+            startActivity(Intent(this, SignUpActivity::class.java))
+        }
 
         myExamAdapter.notifyDataSetChanged()
         //populatePopularExam()
         presenter.getData()
+        if (fAuth.currentUser != null) {
+            presenter.getMyExam(fAuth.currentUser!!.uid)
+            db.collection("col_teacher").whereEqualTo("uid", fAuth.currentUser!!.uid)
+                .get()
+                .addOnSuccessListener {
+                    SharedPref(this).userClass = it.documents[0]["kelas"] as String
+                }
+                .addOnFailureListener {
+                    logE(it.localizedMessage)
+                }
+            changeViewLogged()
+        }
     }
 
-    private fun rvMyExamClickHandler(data: ExamModel) {
-        if (data.id == "add-control") {
+    private fun changeViewLogged() {
+        btn_login.visibility = View.GONE
+        btn_register.visibility = View.GONE
+        btn_logout.visibility = View.VISIBLE
+        btn_logout.setOnClickListener {
+            val ballon = Balloon.Builder(this)
+                .setLayout(R.layout.layout_logout_dialog)
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setWidthRatio(0f)
+                .setHeight(60)
+                .setCornerRadius(4f)
+                .setArrowPosition(0.5f)
+                .setBalloonAnimation(BalloonAnimation.CIRCULAR)
+                .build()
+            ballon.showAlignBottom(it)
+            ballon.getContentView().findViewById<LinearLayout>(R.id.ll_keluar)
+                .setOnClickListener {
+                    fAuth.signOut()
+                    val pref = SharedPref(this)
+                    pref.userClass = ""
+                    pref.userRole = ""
+                    pref.userName = ""
+                    resetView()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
+                }
+        }
+    }
+
+    private fun resetView() {
+        btn_login.visibility = View.VISIBLE
+        btn_register.visibility = View.VISIBLE
+        btn_logout.visibility = View.GONE
+    }
+
+    private fun rvMyExamClickHandler(data: ExamModel?) {
+        if (data!!.id == "add-control") {
             if (fAuth.currentUser != null) {
                 showCreateNew()
             } else {
@@ -98,17 +156,17 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
         startActivity(intent)
     }
 
-    private fun showCreateNew(){
-        val alertDialogBuilder=AlertDialog.Builder(this)
-        val alertLayout=layoutInflater.inflate(R.layout.layout_create_dialog,null)
+    private fun showCreateNew() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        val alertLayout = layoutInflater.inflate(R.layout.layout_create_dialog, null)
         alertDialogBuilder.setView(alertLayout)
         alertDialogBuilder.setCancelable(false)
-        val etJudul= alertLayout.findViewById<EditText>(R.id.et_judul)
-        val etKeterangan= alertLayout.findViewById<EditText>(R.id.et_keterangan)
-        val spKategori= alertLayout.findViewById<Spinner>(R.id.sp_kategori)
-        val btnCancel=alertLayout.findViewById<ImageView>(R.id.btn_close)
-        val btnSubmit=alertLayout.findViewById<Button>(R.id.btn_submit)
-        val dialog=alertDialogBuilder.create()
+        val etJudul = alertLayout.findViewById<EditText>(R.id.et_judul)
+        val etKeterangan = alertLayout.findViewById<EditText>(R.id.et_keterangan)
+        val spKategori = alertLayout.findViewById<Spinner>(R.id.sp_kategori)
+        val btnCancel = alertLayout.findViewById<ImageView>(R.id.btn_close)
+        val btnSubmit = alertLayout.findViewById<Button>(R.id.btn_submit)
+        val dialog = alertDialogBuilder.create()
         btnCancel.setOnClickListener {
             dialog.dismiss()
         }
@@ -152,5 +210,10 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
         popularExamList.clear()
         popularExamList.addAll(data)
         popularExamAdapter.notifyDataSetChanged()
+    }
+
+    override fun showMyExam(data: List<ExamModel?>) {
+        myExamList.addAll(data)
+        myExamAdapter.notifyDataSetChanged()
     }
 }

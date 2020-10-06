@@ -101,16 +101,23 @@ class CreateQuizFragment : Fragment() {
             .setOnClickListener {
                 val intent = Intent(context!!, DetailCategoryActivity::class.java)
                 intent.putExtra("category", CreateExamActivity.kategori)
+                intent.putExtra("caller","add")
                 startActivity(intent)
             }
     }
+
+    override fun onResume() {
+        super.onResume()
+        rvAdapter.notifyDataSetChanged()
+    }
+
 
     private fun addQuestions(type: String) {
         logE(type)
         CreateExamActivity.questionList.add(
             QuizModel(
                 questionCount, "Masukan Pertayaan...",
-                mutableListOf("Long Press to change...", "Long Press to change..."), type, "", 10
+                mutableListOf("Pilihan Jawaban", "Pilihan Jawaban"), type, "", 10
             )
         )
         questionCount++

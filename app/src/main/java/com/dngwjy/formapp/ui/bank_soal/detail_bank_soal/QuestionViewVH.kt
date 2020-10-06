@@ -8,14 +8,28 @@ import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
+import com.dngwjy.formapp.data.local.SharedPref
 import com.dngwjy.formapp.data.model.QuizModel
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.question_view.*
+import kotlinx.android.synthetic.main.question_view.ll_isian
+import kotlinx.android.synthetic.main.question_view.ll_pilgan
+import kotlinx.android.synthetic.main.question_view.rg_option
+import kotlinx.android.synthetic.main.question_view.tv_isian_question
+import kotlinx.android.synthetic.main.question_view.tv_pilgan_question
+import kotlinx.android.synthetic.main.question_view.tv_question_number
+import kotlinx.android.synthetic.main.question_view_layout.*
 
 class QuestionViewVH(override val containerView: View) : RecyclerView.ViewHolder(containerView),
     LayoutContainer, RvAdapter.BinderData<QuizModel?> {
     override fun bindData(data: QuizModel?, listen: (QuizModel?) -> Unit, position: Int) {
         tv_question_number.text = "${position + 1}"
+        if(SharedPref(containerView.context).userRole=="teacher"){
+            bt_import.visibility=View.VISIBLE
+            bt_import.setOnClickListener {
+                listen(data)
+            }
+        }
         when (data!!.questionType) {
             "pilgan" -> {
                 ll_pilgan.visibility = View.VISIBLE

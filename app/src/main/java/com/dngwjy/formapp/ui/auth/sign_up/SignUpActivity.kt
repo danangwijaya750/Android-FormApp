@@ -2,10 +2,12 @@ package com.dngwjy.formapp.ui.auth.sign_up
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.ui.auth.login.LoginActivity
+import com.dngwjy.formapp.util.logE
 import com.dngwjy.formapp.util.toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -56,6 +58,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun doSignUp() {
+        pg_loading.visibility = View.VISIBLE
         fAuth.createUserWithEmailAndPassword(
             et_email.text.toString().trim(),
             et_password.text.toString().trim()
@@ -71,11 +74,27 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun storeUserData() {
-        if (isStudent) {
-            db.collection("col_student")
-        } else {
-            db.collection("col_teacher")
-        }
+        val data = hashMapOf<String, String>(
+            "uid" to fAuth.currentUser!!.uid,
+            "name" to et_name.text.toString(),
+            "email" to et_email.text.toString(),
+            "kelas" to sp_kelase.selectedItem.toString()
+        )
+        val role =
+            when (isStudent) {
+                true -> "col_student"
+                else -> "col_teacher"
+            }
+        db.collection(role).add(data)
+            .addOnSuccessListener {
+                toast("Registrasi Berhasil")
+                pg_loading.visibility=View.GONE
+            }
+            .addOnFailureListener {
+                toast("Terjadi Kesalahan")
+                logE(it.localizedMessage)
+                pg_loading.visibility=View.GONE
+            }
     }
 
 }

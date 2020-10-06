@@ -1,9 +1,11 @@
 package com.dngwjy.formapp.ui.exam
 
 import com.dngwjy.formapp.data.model.QuizModel
+import com.dngwjy.formapp.util.logD
 import com.dngwjy.formapp.util.logE
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class CreateExamPresenter(private val db: FirebaseFirestore, private val view: CreateExamView) {
 
@@ -16,7 +18,10 @@ class CreateExamPresenter(private val db: FirebaseFirestore, private val view: C
         accessCode: String,
         startDate: String,
         endDate: String,
-        image: ByteArray?
+        image: ByteArray?,
+        uid: String,
+        kelas: String,
+        tags: MutableList<String>
     ) {
         view.isLoading(true)
         val data = hashMapOf<String, Any>(
@@ -30,7 +35,9 @@ class CreateExamPresenter(private val db: FirebaseFirestore, private val view: C
             "accessType" to accessType,
             "accessCode" to accessCode,
             "startDate" to startDate,
-            "endDate" to endDate
+            "endDate" to endDate,
+            "uid" to uid,
+            "kelas" to kelas
         )
         db.collection("col_exam")
             .add(data)
@@ -51,7 +58,7 @@ class CreateExamPresenter(private val db: FirebaseFirestore, private val view: C
         val imageRef = storageRef.child("images/${idExam}.jpg")
         imageRef.putBytes(dataImage)
             .addOnSuccessListener {
-                updateImageUrl(idExam)
+                getDownloadURL(imageRef, idExam)
             }
             .addOnFailureListener {
                 logE(it.localizedMessage)
@@ -59,15 +66,16 @@ class CreateExamPresenter(private val db: FirebaseFirestore, private val view: C
             }
     }
 
-    private fun updateImageUrl(idExam: String) {
-        var url = when (idExam[0]) {
-            '9' -> {
-                "https://firebasestorage.googleapis.com/v0/b/formforexam-670e3.appspot.com/o/images%2F${idExam}.jpg?alt=media"
-            }
-            else -> {
-                "https://firebasestorage.googleapis.com/v0/b/formforexam-670e3.appspot.com/o/images%2F9${idExam}.jpg?alt=media"
-            }
+    private fun getDownloadURL(imageRef: StorageReference, idExam: String) {
+        imageRef.downloadUrl.addOnFailureListener {
+            logE(it.localizedMessage)
+        }.addOnSuccessListener {
+            logD("url $it")
+            updateImageUrl(idExam, it.toString())
         }
+    }
+
+    private fun updateImageUrl(idExam: String, url: String) {
         db.collection("col_exam").document(idExam)
             .update(
                 "image",
