@@ -17,10 +17,11 @@ class ReviewExamFragment : Fragment() {
 
     companion object {
         fun getInstance(): ReviewExamFragment = ReviewExamFragment()
-        val rvAdapter = object : RvAdapter<QuizModel>(CreateExamActivity.questionList, {
+        val rvAdapter = object : RvAdapter<QuizModel?>(CreateExamActivity.questionList, {
 
         }) {
-            override fun layoutId(position: Int, obj: QuizModel): Int = R.layout.question_view_layout
+            override fun layoutId(position: Int, obj: QuizModel?): Int =
+                R.layout.question_view_layout
 
             override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder =
                 ViewQuizVH(view)

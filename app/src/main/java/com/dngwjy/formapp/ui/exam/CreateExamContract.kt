@@ -103,6 +103,29 @@ class CreateExamPresenter(private val db: FirebaseFirestore, private val view: C
             }
     }
 
+    fun getQuizData(examId: String) {
+        view.isLoading(true)
+        db.collection("col_exam").document(examId)
+            .collection("questions")
+            .get()
+            .addOnSuccessListener {
+                val result = mutableListOf<QuizModel?>()
+                if (!it.isEmpty) {
+                    it.documents.forEach { doc ->
+                        result.add(doc.toObject(QuizModel::class.java))
+                    }
+                    result.sortBy { attr -> attr!!.id }
+                    view.showGetQuizResult(result)
+                    view.isLoading(false)
+                }
+            }
+            .addOnFailureListener {
+                view.isError(it.localizedMessage)
+                view.isLoading(false)
+            }
+
+    }
+
 }
 
 interface CreateExamView {
@@ -110,4 +133,5 @@ interface CreateExamView {
     fun isError(msg: String)
     fun showUploadExamResult(data: String)
     fun showUploadQuestionResult(data: QuizModel?)
+    fun showGetQuizResult(data: List<QuizModel?>)
 }

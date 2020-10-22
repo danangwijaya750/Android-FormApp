@@ -27,6 +27,24 @@ class CreateQuizFragment : Fragment() {
     companion object {
         fun getInstance(): CreateQuizFragment = CreateQuizFragment()
         var questionCount = 0
+        val rvAdapter =
+            object : RvAdapter<QuizModel?>(CreateExamActivity.questionList, {
+                updateItems()
+            }) {
+                override fun layoutId(position: Int, obj: QuizModel?): Int =
+                    R.layout.question_layout
+
+                override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder =
+                    QuizVH(view)
+            }
+
+        fun updateItems() {
+            CreateExamActivity.questionList.forEach {
+                logE("data ${it!!.id}, ${it.question}, ${it.questionType}")
+            }
+            rvAdapter.notifyDataSetChanged()
+            ReviewExamFragment.rvAdapter.notifyDataSetChanged()
+        }
     }
 
     var callback: OnChangedFragmentListener? = null
@@ -36,32 +54,12 @@ class CreateQuizFragment : Fragment() {
     }
 
 
-    private val rvAdapter =
-        object : RvAdapter<QuizModel>(CreateExamActivity.questionList, {
-            updateItems()
-        }) {
-            override fun layoutId(position: Int, obj: QuizModel): Int = R.layout.question_layout
-
-            override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder =
-                QuizVH(view)
-        }
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_create, container, false)
-    }
-
-    private fun updateItems() {
-        CreateExamActivity.questionList.forEach {
-            logE("data ${it.id}, ${it.question}, ${it.questionType}")
-        }
-        rvAdapter.notifyDataSetChanged()
-        ReviewExamFragment.rvAdapter.notifyDataSetChanged()
-        callback!!.onChanged()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -94,7 +92,7 @@ class CreateQuizFragment : Fragment() {
             }
         ballon.getContentView().findViewById<LinearLayout>(R.id.ll_isian)
             .setOnClickListener {
-                //addQuestions("isian")
+                addQuestions("isian")
                 ballon.dismiss()
             }
         ballon.getContentView().findViewById<LinearLayout>(R.id.ll_import)
@@ -121,10 +119,10 @@ class CreateQuizFragment : Fragment() {
             )
         )
         questionCount++
-        CreateExamActivity.questionList.sortBy { it.id }
+        CreateExamActivity.questionList.sortBy { it!!.id }
         rvAdapter.notifyDataSetChanged()
         ReviewExamFragment.rvAdapter.notifyDataSetChanged()
-        CreateExamActivity.totalScore = CreateExamActivity.questionList.sumBy { it.score }
+        CreateExamActivity.totalScore = CreateExamActivity.questionList.sumBy { it!!.score }
         logE("Score : ${CreateExamActivity.totalScore}")
         callback!!.onChanged()
     }

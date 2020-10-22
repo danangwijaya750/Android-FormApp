@@ -147,6 +147,10 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
             } else {
                 showNotLogged()
             }
+        } else {
+            val intent = Intent(this, CreateExamActivity::class.java)
+            intent.putExtra("data-exam", data)
+            startActivity(intent)
         }
     }
 

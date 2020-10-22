@@ -1,4 +1,4 @@
-package com.dngwjy.formapp.ui.bank_soal.detail_bank_soal
+package com.dngwjy.formapp.ui.quiz
 
 import android.content.res.ColorStateList
 import android.view.View
@@ -9,20 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
 import com.dngwjy.formapp.data.local.SharedPref
+import com.dngwjy.formapp.data.model.AnswerModel
 import com.dngwjy.formapp.data.model.QuizModel
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.question_view.*
+import kotlinx.android.synthetic.main.question_quiz_layout.*
 
-class QuestionViewVH(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(containerView),
     LayoutContainer, RvAdapter.BinderData<QuizModel?> {
     override fun bindData(data: QuizModel?, listen: (QuizModel?) -> Unit, position: Int) {
         tv_question_number.text = "${position + 1}"
-        if(SharedPref(containerView.context).userRole=="teacher"){
-            bt_import.visibility=View.VISIBLE
-            bt_import.setOnClickListener {
-                listen(data)
-            }
-        }
         when (data!!.questionType) {
             "pilgan" -> {
                 ll_pilgan.visibility = View.VISIBLE
@@ -51,9 +46,11 @@ class QuestionViewVH(override val containerView: View) : RecyclerView.ViewHolder
             rdBtn.layoutParams = params
             rdBtn.textSize = 20f
             rdBtn.setPadding(10, 10, 10, 10)
-            rdBtn.id=View.generateViewId()
-            rdBtn.background=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
-            rdBtn.buttonDrawable=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
+            rdBtn.id = View.generateViewId()
+            rdBtn.background =
+                containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
+            rdBtn.buttonDrawable =
+                containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
             val states = arrayOf(
                 intArrayOf(android.R.attr.state_checked),
                 intArrayOf(-android.R.attr.state_checked)
@@ -66,15 +63,26 @@ class QuestionViewVH(override val containerView: View) : RecyclerView.ViewHolder
             val myList = ColorStateList(states, colors)
             rdBtn.setTextColor(myList)
             rdBtn.text = value
-            if (SharedPref(containerView.context).userRole == "teacher") {
-                if (value == data.answer) rdBtn.isChecked = true
-            }
-            rdBtn.isEnabled = false
+//            if(value==data.answer) rdBtn.isChecked=true
+//            rdBtn.isEnabled = false
             rg_option.addView(rdBtn)
+            rdBtn.setOnClickListener {
+                QuizActivity.itemPosition = position
+                QuizActivity.dataAnswer.add(
+                    AnswerModel(
+                        "",
+                        data.id,
+                        QuizActivity.idExam,
+                        SharedPref(containerView.context).uid,
+                        data, value, false
+                    )
+                )
+                listen(data)
+            }
         }
     }
 
-    private fun clearRg(){
+    private fun clearRg() {
         val count: Int = rg_option.childCount
         if (count > 0) {
             for (i in count - 1 downTo 0) {

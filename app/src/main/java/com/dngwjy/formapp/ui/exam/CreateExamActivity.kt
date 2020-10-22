@@ -14,8 +14,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.data.local.SharedPref
+import com.dngwjy.formapp.data.model.ExamModel
 import com.dngwjy.formapp.data.model.QuizModel
-import com.dngwjy.formapp.ui.auth.login.LoginActivity
 import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
 import com.dngwjy.formapp.ui.exam.create.CreateQuizFragment
 import com.dngwjy.formapp.ui.exam.result.ResultQuizFragment
@@ -37,7 +37,7 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         var examTitle = ""
         var keterangan = ""
         var kategori = ""
-        val questionList = mutableListOf<QuizModel>()
+        val questionList = mutableListOf<QuizModel?>()
         var accessType = ""
         var fragmentPosition = 0
         var startDate = ""
@@ -45,7 +45,10 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         var totalScore = 0
         var bitmap: Bitmap? = null
         var questionPositions = 0
-        var tags= mutableListOf<String>()
+        var tags = mutableListOf<String>()
+        var uploaded = false
+        var examId = ""
+
     }
 
     private val presenter = CreateExamPresenter(FirebaseFirestore.getInstance(), this)
@@ -63,20 +66,29 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         window.requestFeature(Window.FEATURE_ACTION_BAR)
         setContentView(R.layout.activity_create_exam)
         supportActionBar?.hide()
-
-        tv_exam_name.text = examTitle
         vp_main.apply {
             adapter = FragmentAdapter(this@CreateExamActivity.supportFragmentManager)
         }
         tl_main.setupWithViewPager(vp_main)
+        if (intent.hasExtra("data-exam")) {
+            logE("dataexam")
+            val dataExam = intent.extras!!["data-exam"] as ExamModel
+            uploaded = true
+            examId = dataExam.id
+            examTitle = dataExam.title
+            presenter.getQuizData(examId)
+        }
+
+        tv_exam_name.text = examTitle
         iv_back.setOnClickListener { onBackPressed() }
         iv_next.setOnClickListener {
-            if (fragmentPosition == 2) {
+            if (fragmentPosition == 2 && !uploaded) {
                 uploadExamData()
             }
         }
 
     }
+
 
     class FragmentAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         private val pages = listOf(
@@ -147,7 +159,7 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
 
     private fun uploadQuestions(examId: String) {
         if (questionPositions < questionList.size) {
-            presenter.uploadQuestion(examId, questionList[questionPositions])
+            presenter.uploadQuestion(examId, questionList[questionPositions]!!)
             questionPositions++
         } else {
             logD("Questions uploaded")
@@ -194,5 +206,12 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
 
     override fun showUploadQuestionResult(data: QuizModel?) {
 
+    }
+
+    override fun showGetQuizResult(data: List<QuizModel?>) {
+        questionList.clear()
+        questionList.addAll(data)
+        CreateQuizFragment.rvAdapter.notifyDataSetChanged()
+        ReviewExamFragment.rvAdapter.notifyDataSetChanged()
     }
 }

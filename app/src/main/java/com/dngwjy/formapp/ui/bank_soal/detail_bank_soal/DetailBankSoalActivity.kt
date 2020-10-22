@@ -15,6 +15,7 @@ import com.dngwjy.formapp.data.model.ExamModel
 import com.dngwjy.formapp.data.model.QuizModel
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
 import com.dngwjy.formapp.ui.exam.create.CreateQuizFragment
+import com.dngwjy.formapp.ui.quiz.QuizActivity
 import com.dngwjy.formapp.util.logE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,7 +24,8 @@ import kotlinx.android.synthetic.main.activity_detail_bank_soal.*
 class DetailBankSoalActivity : AppCompatActivity(), DetailBankSoalView {
     private val questions = mutableListOf<QuizModel?>()
     private val presenter = DetailBankSoalPresenter(FirebaseFirestore.getInstance(), this)
-    private val fAuth=FirebaseAuth.getInstance()
+    private val fAuth = FirebaseAuth.getInstance()
+    private lateinit var dataExam: ExamModel
     private val rvAdapter = object : RvAdapter<QuizModel?>(questions, {
         handleClick(it!!)
     }) {
@@ -78,10 +80,17 @@ class DetailBankSoalActivity : AppCompatActivity(), DetailBankSoalView {
                 ll_simpan.visibility=View.VISIBLE
                 ll_mulai.visibility=View.GONE
             }
-            "student"->{
-                ll_mulai.visibility=View.VISIBLE
-                ll_edit.visibility=View.GONE
-                ll_simpan.visibility=View.GONE
+            "student" -> {
+                ll_mulai.visibility = View.VISIBLE
+                ll_edit.visibility = View.GONE
+                ll_simpan.visibility = View.GONE
+                ll_mulai.setOnClickListener {
+                    if (this::dataExam.isInitialized) {
+                        val intent = Intent(this, QuizActivity::class.java)
+                        intent.putExtra("data-quiz", dataExam)
+                        startActivity(intent)
+                    }
+                }
             }
         }
     }
@@ -99,18 +108,19 @@ class DetailBankSoalActivity : AppCompatActivity(), DetailBankSoalView {
         questions.clear()
         presenter.getData(data.id)
 
-        ll_edit.setOnClickListener {
-            CreateExamActivity.examTitle = data.title
-            CreateExamActivity.kategori = data.category
-            CreateExamActivity.keterangan = data.desc
-            questions.forEach {
-                CreateExamActivity.questionList.add(it!!)
-                CreateQuizFragment.questionCount++
-            }
-            CreateQuizFragment.questionCount++
-            startActivity(Intent(this, CreateExamActivity::class.java))
-            finish()
-        }
+//        ll_edit.setOnClickListener {
+//            CreateExamActivity.examTitle = data.title
+//            CreateExamActivity.kategori = data.category
+//            CreateExamActivity.keterangan = data.desc
+//            questions.forEach {
+//                CreateExamActivity.questionList.add(it!!)
+//                CreateQuizFragment.questionCount++
+//            }
+//            CreateQuizFragment.questionCount++
+//            startActivity(Intent(this, CreateExamActivity::class.java))
+//            finish()
+//        }
+        dataExam = data
     }
 
     override fun onBackPressed() {
@@ -132,6 +142,8 @@ class DetailBankSoalActivity : AppCompatActivity(), DetailBankSoalView {
     override fun showResult(result: List<QuizModel?>) {
         questions.clear()
         questions.addAll(result)
+        dataExam.quizes.clear()
+        dataExam.quizes.addAll(result)
         rvAdapter.notifyDataSetChanged()
     }
 

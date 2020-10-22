@@ -94,7 +94,7 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
                     ballon.dismiss()
                     var id = 0
                     CreateExamActivity.questionList.forEachIndexed { index, it ->
-                        if (it.id == data.id) {
+                        if (it!!.id == data.id) {
                             id = index
                             CreateExamActivity.questionList.removeAt(id)
                             return@forEachIndexed
@@ -206,9 +206,9 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
             setPositiveButton("Simpan") { dialog, which ->
                 var id = 0
                 CreateExamActivity.questionList.forEachIndexed { index, it ->
-                    if (it.id == data.id) {
+                    if (it!!.id == data.id) {
                         id = index
-                        CreateExamActivity.questionList[id].score = input.text.toString().toInt()
+                        CreateExamActivity.questionList[id]!!.score = input.text.toString().toInt()
                         return@forEachIndexed
                     }
                 }
@@ -251,9 +251,9 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
             setPositiveButton("Simpan") { dialog, which ->
                 var id = 0
                 CreateExamActivity.questionList.forEachIndexed { index, it ->
-                    if (it.id == data.id) {
+                    if (it!!.id == data.id) {
                         id = index
-                        CreateExamActivity.questionList[id].question = input.text.toString()
+                        CreateExamActivity.questionList[id]!!.question = input.text.toString()
                         return@forEachIndexed
                     }
                 }
@@ -279,9 +279,9 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
     ) {
         var id = 0
         CreateExamActivity.questionList.forEachIndexed { idx, it ->
-            if (it.id == data.id) {
+            if (it!!.id == data.id) {
                 id = idx
-                CreateExamActivity.questionList[id].choice[index] = value.toString()
+                CreateExamActivity.questionList[id]!!.choice[index] = value.toString()
                 return@forEachIndexed
             }
         }
@@ -310,9 +310,9 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
             setPositiveButton("Simpan") { dialog, which ->
                 var id = 0
                 CreateExamActivity.questionList.forEachIndexed { idx, it ->
-                    if (it.id == data.id) {
+                    if (it!!.id == data.id) {
                         id = idx
-                        CreateExamActivity.questionList[id].choice[index] = input.text.toString()
+                        CreateExamActivity.questionList[id]!!.choice[index] = input.text.toString()
                         return@forEachIndexed
                     }
                 }
@@ -335,14 +335,14 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
     ) {
         var id = 0
         CreateExamActivity.questionList.forEachIndexed { idx, it ->
-            if (it.id == data.id) {
+            if (it!!.id == data.id) {
                 id = idx
-                CreateExamActivity.questionList[id].answer = value
+                CreateExamActivity.questionList[id]!!.answer = value
                 return@forEachIndexed
             }
         }
         listen(data)
-        logE("data ${CreateExamActivity.questionList[id].answer}")
+        logE("data ${CreateExamActivity.questionList[id]!!.answer}")
     }
 
     private fun isIsian(data: QuizModel, position: Int, listen: (QuizModel) -> Unit) {

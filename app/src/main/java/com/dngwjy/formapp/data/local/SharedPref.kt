@@ -11,6 +11,7 @@ class SharedPref(private val context: Context) {
     private val USERNAME = "USER_NAME"
     private val ROLE = "USER_ROLE"
     private val CLASS = "USER_CLASS"
+    private val UID = "UID"
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREF_NAME, 0)
 
@@ -33,5 +34,9 @@ class SharedPref(private val context: Context) {
     var userClass: String
         get() = prefs.getString(CLASS, "").toString()
         set(value) = prefs.edit().putString(CLASS, value).apply()
+
+    var uid: String
+        get() = prefs.getString(UID, "").toString()
+        set(value) = prefs.edit().putString(UID, value).apply()
 
 }

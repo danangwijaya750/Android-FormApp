@@ -33,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
                 )
                     .addOnCompleteListener {
                         if(it.isSuccessful){
+                            SharedPref(this).uid = it.result!!.user!!.uid
                             checkRole()
                         }
                         else{
@@ -75,8 +76,8 @@ class LoginActivity : AppCompatActivity() {
                         true->"teacher"
                         else->"student"
                     }
-                SharedPref(this).userClass=userClass
-                pg_loading.visibility=View.GONE
+                SharedPref(this).userClass = userClass
+                pg_loading.visibility = View.GONE
                 startActivity(callIntent)
                 finish()
             }
@@ -85,5 +86,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+    }
+
+    private fun uploadAttemp() {
+
     }
 }
