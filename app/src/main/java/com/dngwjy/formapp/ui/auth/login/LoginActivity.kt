@@ -59,16 +59,18 @@ class LoginActivity : AppCompatActivity() {
                 logE(it.localizedMessage)
             }
             .addOnSuccessListener {
-                var userClass=""
-             val callIntent=
-                 when(it.isEmpty){
-                     true-> {
-                         Intent(this, TeacherDashboardActivity::class.java)
-                     }
-                     else->{
-                         userClass=it.documents[0]["kelas"] as String
-                         Intent(this,StudentDashboardActivity::class.java)
-                     }
+                var userClass = ""
+                var userName = ""
+                val callIntent =
+                    when (it.isEmpty) {
+                        true -> {
+                            Intent(this, TeacherDashboardActivity::class.java)
+                        }
+                        else -> {
+                            userName = it.documents[0]["name"] as String
+                            userClass = it.documents[0]["kelas"] as String
+                            Intent(this, StudentDashboardActivity::class.java)
+                        }
                  }
                 toast("Login Berhasil!")
                 SharedPref(this).userRole=
@@ -77,6 +79,7 @@ class LoginActivity : AppCompatActivity() {
                         else->"student"
                     }
                 SharedPref(this).userClass = userClass
+                SharedPref(this).userName = userName
                 pg_loading.visibility = View.GONE
                 startActivity(callIntent)
                 finish()

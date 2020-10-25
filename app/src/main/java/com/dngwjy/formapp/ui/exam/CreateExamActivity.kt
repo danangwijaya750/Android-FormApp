@@ -119,22 +119,27 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
     }
 
     override fun onBackPressed() {
-        val builder=AlertDialog.Builder(this)
-        builder.apply {
-            title="Peringatan!"
-            setMessage("Anda yakin ingin keluar? semua perubahan anda akan terhapus")
-            setPositiveButton("Ya") { dialog, which ->
-                dialog.dismiss()
-                questionList.clear()
-                bitmap = null
-                CreateQuizFragment.questionCount = 0
-                super.onBackPressed()
-                finish()
-            }
-            setNegativeButton("tidak") { dialog, which ->
-                dialog.dismiss()
-            }
-        }.create().show()
+        if (!uploaded) {
+            val builder = AlertDialog.Builder(this)
+            builder.apply {
+                title = "Peringatan!"
+                setMessage("Anda yakin ingin keluar? semua perubahan anda akan terhapus")
+                setPositiveButton("Ya") { dialog, which ->
+                    dialog.dismiss()
+                    questionList.clear()
+                    bitmap = null
+                    CreateQuizFragment.questionCount = 0
+                    super.onBackPressed()
+                    finish()
+                }
+                setNegativeButton("tidak") { dialog, which ->
+                    dialog.dismiss()
+                }
+            }.create().show()
+        } else {
+            super.onBackPressed()
+            finish()
+        }
     }
 
     fun uploadExamData() {

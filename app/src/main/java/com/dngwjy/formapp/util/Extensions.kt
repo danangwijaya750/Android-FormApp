@@ -18,9 +18,13 @@ fun Context.toast(msg:String?)=msg.let {
     Toast.makeText(this,it,Toast.LENGTH_SHORT).show()
 }
 
-inline fun<reified T> T.convertDate(milis:Long,dateFormat:String):String{
+inline fun <reified T> T.convertDate(milis: Long, dateFormat: String): String {
     val formatter = SimpleDateFormat(dateFormat)
     val calendar: Calendar = Calendar.getInstance()
     calendar.timeInMillis = milis
     return formatter.format(calendar.time)
+}
+
+inline fun <reified T> T.stringToDate(strDate: String, pattern: String): Date {
+    return SimpleDateFormat(pattern).parse(strDate)
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FormApp</string>
+    <string name="app_name">Quizin</string>
     <string-array name="kategori">
         <item>Bahasa Indonesia</item>
         <item>Bahasa Inggris</item>

@@ -5,17 +5,14 @@ import com.google.firebase.firestore.DocumentId
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AnswerModel(
+data class StudentScoreModel(
     @DocumentId
     var id: String,
-    var questionId: Int,
-    var examId: String,
     var studentId: String,
-    var quizData: QuizModel,
-    var answer: String,
-    var result: Boolean,
+    var score: Int,
+    var examId: String,
     var studentName: String,
-    var examAttemptScoreId: String
+    var takenAt: String
 ) : Parcelable {
-    constructor() : this("", 0, "", "", QuizModel(), "", false, "", "")
+    constructor() : this("", "", 0, "", "", "")
 }

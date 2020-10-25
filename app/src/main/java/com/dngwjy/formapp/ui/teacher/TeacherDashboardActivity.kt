@@ -17,6 +17,7 @@ import com.dngwjy.formapp.ui.auth.login.LoginActivity
 import com.dngwjy.formapp.ui.auth.sign_up.SignUpActivity
 import com.dngwjy.formapp.ui.bank_soal.category.CategoryBankSoalActivity
 import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
+import com.dngwjy.formapp.ui.bank_soal.detail_category.DetailCategoryActivity
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
 import com.dngwjy.formapp.util.logE
 import com.dngwjy.formapp.util.toast
@@ -79,6 +80,11 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
         tv_ujian_populer_all.setOnClickListener {
             startActivity(Intent(this, CategoryBankSoalActivity::class.java))
 
+        }
+        tv_ujian_anda_all.setOnClickListener {
+            val callIntent = Intent(this, DetailCategoryActivity::class.java)
+            callIntent.putExtra("my-exam", SharedPref(this).uid)
+            startActivity(callIntent)
         }
         btn_login.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))

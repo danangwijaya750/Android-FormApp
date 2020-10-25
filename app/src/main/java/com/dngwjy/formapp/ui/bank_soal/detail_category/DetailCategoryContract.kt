@@ -28,6 +28,25 @@ class DetailCategoryPresenter(
             }
     }
 
+    fun getMyExamData(uid: String) {
+        db.collection("col_exam")
+            .whereEqualTo("uid", uid)
+            .get()
+            .addOnSuccessListener {
+                if (!it.isEmpty) {
+                    val result = mutableListOf<ExamModel?>()
+                    it.documents.forEach { doc ->
+                        result.add(doc.toObject(ExamModel::class.java))
+                    }
+                    view.showResult(result)
+                }
+            }
+            .addOnFailureListener {
+                logE(it.localizedMessage)
+            }
+    }
+
+
 }
 
 interface DetailCategoryView {

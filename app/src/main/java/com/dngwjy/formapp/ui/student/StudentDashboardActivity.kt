@@ -14,7 +14,6 @@ import com.dngwjy.formapp.data.local.SharedPref
 import com.dngwjy.formapp.data.model.ExamModel
 import com.dngwjy.formapp.ui.auth.login.LoginActivity
 import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
-import com.dngwjy.formapp.ui.teacher.TeacherDashboardActivity
 import com.dngwjy.formapp.util.logE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -71,6 +70,7 @@ class StudentDashboardActivity : AppCompatActivity() {
             layManager.orientation=LinearLayoutManager.VERTICAL
             layoutManager=layManager
         }
+        btn_profile.text = SharedPref(this).userName[0].toString()
         btn_profile.setOnClickListener {
             val ballon = Balloon.Builder(this)
                 .setLayout(R.layout.layout_logout_dialog)

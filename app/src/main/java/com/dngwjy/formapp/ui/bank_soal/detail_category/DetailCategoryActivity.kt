@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
+import com.dngwjy.formapp.data.local.SharedPref
 import com.dngwjy.formapp.data.model.ExamModel
 import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
+import com.dngwjy.formapp.ui.exam.CreateExamActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_detail_category.*
 
@@ -28,12 +30,19 @@ class DetailCategoryActivity : AppCompatActivity(), DetailCategoryView {
     }
 
     private fun handleClick(data: ExamModel?) {
-        val openIntent = Intent(this, DetailBankSoalActivity::class.java)
-        openIntent.putExtra("data-exam", data)
-        startActivity(openIntent)
-        if(intent.hasExtra("caller")){
-            finish()
+        if (intent.hasExtra("my-exam")) {
+            val intent = Intent(this, CreateExamActivity::class.java)
+            intent.putExtra("data-exam", data)
+            startActivity(intent)
+        } else {
+            val openIntent = Intent(this, DetailBankSoalActivity::class.java)
+            openIntent.putExtra("data-exam", data)
+            startActivity(openIntent)
+            if (intent.hasExtra("caller")) {
+                finish()
+            }
         }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +64,11 @@ class DetailCategoryActivity : AppCompatActivity(), DetailCategoryView {
             onBackPressed()
         }
         //populateData(category)
-        presenter.getData(category)
+        if (intent.hasExtra("category")) {
+            presenter.getData(category)
+        } else {
+            presenter.getMyExamData(SharedPref(this).uid)
+        }
     }
 
 //    private fun populateData(category: String){

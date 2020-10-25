@@ -1,4 +1,4 @@
-package com.dngwjy.formapp.ui.quiz
+package com.dngwjy.formapp.ui.answer
 
 import android.content.res.ColorStateList
 import android.view.View
@@ -8,32 +8,32 @@ import android.widget.RadioGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
-import com.dngwjy.formapp.data.local.SharedPref
 import com.dngwjy.formapp.data.model.AnswerModel
 import com.dngwjy.formapp.data.model.QuizModel
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.question_quiz_layout.*
+import kotlinx.android.synthetic.main.question_student_view.*
 
-class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(containerView),
-    LayoutContainer, RvAdapter.BinderData<QuizModel?> {
-    override fun bindData(data: QuizModel?, listen: (QuizModel?) -> Unit, position: Int) {
+class AnswerVH(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+    LayoutContainer, RvAdapter.BinderData<AnswerModel?> {
+    override fun bindData(data: AnswerModel?, listen: (AnswerModel?) -> Unit, position: Int) {
         tv_question_number.text = "${position + 1}"
-        when (data!!.questionType) {
+        when (data!!.quizData.questionType) {
             "pilgan" -> {
                 ll_pilgan.visibility = View.VISIBLE
                 ll_isian.visibility = View.GONE
-                isPilgan(data, position, listen)
+                isPilgan(data.quizData, position, data.answer)
             }
             "isian" -> {
                 ll_pilgan.visibility = View.GONE
                 ll_isian.visibility = View.VISIBLE
-                isIsian(data, position, listen)
+                isIsian(data.quizData, position, data.answer)
             }
         }
     }
 
-    private fun isPilgan(data: QuizModel, position: Int, listen: (QuizModel) -> Unit) {
+    private fun isPilgan(data: QuizModel, position: Int, answer: String) {
         tv_pilgan_question.text = data.question
+        tv_key_pilgan.setText(data.answer)
         clearRg()
         data.choice.forEachIndexed { index, value ->
             val rdBtn = RadioButton(containerView.context)
@@ -63,22 +63,9 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
             val myList = ColorStateList(states, colors)
             rdBtn.setTextColor(myList)
             rdBtn.text = value
-//            if(value==data.answer) rdBtn.isChecked=true
-//            rdBtn.isEnabled = false
+            if (value == data.answer) rdBtn.isChecked = true
+            rdBtn.isEnabled = false
             rg_option.addView(rdBtn)
-            rdBtn.setOnClickListener {
-                QuizActivity.itemPosition = position
-                QuizActivity.dataAnswer.add(
-                    AnswerModel(
-                        "",
-                        data.id,
-                        QuizActivity.idExam,
-                        SharedPref(containerView.context).uid,
-                        data, value, false, "", ""
-                    )
-                )
-                listen(data)
-            }
         }
     }
 
@@ -94,8 +81,8 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
         }
     }
 
-    private fun isIsian(data: QuizModel, position: Int, listen: (QuizModel) -> Unit) {
+    private fun isIsian(data: QuizModel, position: Int, answer: String) {
+        tv_key_isian.setText(data.answer)
         tv_isian_question.text = data.question
     }
-
 }

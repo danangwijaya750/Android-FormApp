@@ -15,11 +15,11 @@ import com.dngwjy.formapp.data.local.SharedPref
 import com.dngwjy.formapp.data.model.AnswerModel
 import com.dngwjy.formapp.data.model.ExamModel
 import com.dngwjy.formapp.data.model.QuizModel
+import com.dngwjy.formapp.util.convertDate
 import com.dngwjy.formapp.util.logE
 import com.dngwjy.formapp.util.toast
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_quiz.*
-import java.time.LocalDateTime
 
 class QuizActivity : AppCompatActivity() {
     companion object {
@@ -42,6 +42,8 @@ class QuizActivity : AppCompatActivity() {
         override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder = QuizVH(view)
 
     }
+    private var studentName = ""
+    private var examAttemptId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +56,7 @@ class QuizActivity : AppCompatActivity() {
             adapter = quizAdapter
             layoutManager = layManager
         }
+        studentName = SharedPref(this).userName
 
         showData()
     }
@@ -91,9 +94,9 @@ class QuizActivity : AppCompatActivity() {
         } else {
             pg_loading.visibility = View.GONE
             toast("Jawaban berhasil dikirim")
+            showMessage()
             dataAnswer.clear()
             dataQuiz.clear()
-            uploadScore()
         }
     }
 
@@ -104,7 +107,9 @@ class QuizActivity : AppCompatActivity() {
             "studentId" to dataAnswer[uploadPosition].studentId,
             "quizData" to dataAnswer[uploadPosition].quizData,
             "answer" to dataAnswer[uploadPosition].answer,
-            "result" to dataAnswer[uploadPosition].result
+            "result" to dataAnswer[uploadPosition].result,
+            "studentName" to studentName,
+            "examAttemptScoreId" to examAttemptId
         )
         db.collection("col_exam_attempt")
             .add(data)
@@ -130,7 +135,8 @@ class QuizActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         btnSubmit.setOnClickListener {
-            uploadAttempt()
+            //uploadAttempt()
+            uploadScore()
             dialog.dismiss()
         }
         dialog.show()
@@ -160,12 +166,14 @@ class QuizActivity : AppCompatActivity() {
             "studentId" to SharedPref(this).uid,
             "examId" to idExam,
             "score" to scoreGotten,
-            "takenAt" to LocalDateTime.now()
+            "takenAt" to convertDate(System.currentTimeMillis(), "dd-MM-yyyy hh:mm:ss"),
+            "studentName" to studentName
         )
-        db.collection("co_score")
+        db.collection("col_student_score")
             .add(data)
             .addOnSuccessListener {
-                showMessage()
+                examAttemptId = it.id
+                uploadAttempt()
             }
             .addOnFailureListener {
                 logE(it.localizedMessage)
