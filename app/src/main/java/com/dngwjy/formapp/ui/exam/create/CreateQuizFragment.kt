@@ -76,14 +76,16 @@ class CreateQuizFragment : Fragment() {
             .setArrowSize(10)
             .setArrowOrientation(ArrowOrientation.TOP)
             .setWidthRatio(0f)
-            .setHeight(249)
+            .setHeight(169)
             .setCornerRadius(4f)
             .setArrowPosition(0.5f)
             .setLifecycleOwner(this)
             .setBalloonAnimation(BalloonAnimation.CIRCULAR)
             .build()
         ll_add.setOnClickListener {
-            ballon.showAlignBottom(it)
+            if(!CreateExamActivity.uploaded) {
+                ballon.showAlignBottom(it)
+            }
         }
         ballon.getContentView().findViewById<LinearLayout>(R.id.ll_pilgan)
             .setOnClickListener {

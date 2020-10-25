@@ -74,7 +74,7 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
                         data.id,
                         QuizActivity.idExam,
                         SharedPref(containerView.context).uid,
-                        data, value, false, "", ""
+                        data, value, false,"",""
                     )
                 )
                 listen(data)

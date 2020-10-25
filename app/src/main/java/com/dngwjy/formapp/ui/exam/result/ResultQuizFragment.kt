@@ -31,7 +31,7 @@ class ResultQuizFragment : Fragment() {
     private val listResponse = mutableListOf<AnswerModel?>()
     private val listQuizAvg = mutableListOf<QuizDomain>()
     private val listQuizResposnse = mutableListOf<QuizDomain>()
-    private val listStudentScore = mutableListOf<StudentScoreModel?>()
+    private val listStudentScore= mutableListOf<StudentScoreModel?>()
 
     private val listCategory = mutableListOf<String>("Ringkasan", "Tiap Soal", "Individual")
     private val rvCategoryAdapter =
@@ -54,14 +54,12 @@ class ResultQuizFragment : Fragment() {
         override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder =
             TiapSoalVH(view)
     }
-    private val rvIndividualAdapter = object : RvAdapter<StudentScoreModel?>(listStudentScore, {
+    private val rvIndividualAdapter= object :RvAdapter<StudentScoreModel?>(listStudentScore,{
         handleClickStudent(it)
-    }) {
-        override fun layoutId(position: Int, obj: StudentScoreModel?): Int =
-            R.layout.item_student_score
+    }){
+        override fun layoutId(position: Int, obj: StudentScoreModel?): Int = R.layout.item_student_score
 
-        override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder =
-            IndividualVH(view)
+        override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder = IndividualVH(view)
     }
 
     private var responses = 0
@@ -71,22 +69,15 @@ class ResultQuizFragment : Fragment() {
         rvCategoryAdapter.notifyDataSetChanged()
         changeView()
     }
-
-    private fun handleClickStudent(data: StudentScoreModel?) {
-        val answer = listResponse.filter { it!!.examAttemptScoreId == data!!.id }.toMutableList()
-        answer.sortBy { sort -> sort!!.questionId }
-        val dataSend = StudentAnswerDomain(
-            data!!.id,
-            data.studentId,
-            data.score,
-            data.examId,
-            data.studentName,
-            data.takenAt,
-            CreateExamActivity.examTitle,
+    private fun handleClickStudent(data:StudentScoreModel?){
+        val answer = listResponse.filter {it!!.examAttemptScoreId==data!!.id}.toMutableList()
+        answer.sortBy { sort-> sort!!.questionId }
+        val dataSend=StudentAnswerDomain(
+            data!!.id,data.studentId,data.score,data.examId,data.studentName,data.takenAt,CreateExamActivity.examTitle,
             answer
         )
-        val callIntent = Intent(context, StudentAnswerActivity::class.java)
-        callIntent.putExtra("data-answer", dataSend)
+        val callIntent = Intent(context,StudentAnswerActivity::class.java)
+        callIntent.putExtra("data-answer",dataSend)
         startActivity(callIntent)
     }
 
@@ -113,7 +104,7 @@ class ResultQuizFragment : Fragment() {
             }
             "Individual" -> {
                 rv_response.apply {
-                    adapter = rvIndividualAdapter
+                    adapter=rvIndividualAdapter
                     val layMan = LinearLayoutManager(this@ResultQuizFragment.context)
                     layMan.orientation = LinearLayoutManager.VERTICAL
                     layoutManager = layMan
@@ -156,30 +147,29 @@ class ResultQuizFragment : Fragment() {
             }
             .addOnSuccessListener {
                 if (!it.isEmpty) {
-                    iv_status.visibility = View.GONE
+                    iv_status.visibility=View.GONE
                     logE(it.documents.size.toString())
                     it.documents.forEach { doc ->
                         listResponse.add(doc.toObject(AnswerModel::class.java))
                     }
                     distinctData()
                     showRingkasan()
-                } else {
+                }else{
                     tv_response.text = "0"
-                    iv_status.visibility = View.VISIBLE
+                    iv_status.visibility=View.VISIBLE
                 }
             }
     }
-
-    private fun getResponseScore() {
+    private fun getResponseScore(){
         listStudentScore.clear()
         db.collection("col_student_score")
-            .whereEqualTo("examId", CreateExamActivity.examId)
+            .whereEqualTo("examId",CreateExamActivity.examId)
             .get()
             .addOnSuccessListener {
-                if (!it.isEmpty) {
-                    it.documents.forEach { doc ->
-                        listStudentScore.add(doc.toObject(StudentScoreModel::class.java))
-                    }
+                if(!it.isEmpty){
+                 it.documents.forEach { doc->
+                     listStudentScore.add(doc.toObject(StudentScoreModel::class.java))
+                 }
                 }
             }
             .addOnFailureListener {

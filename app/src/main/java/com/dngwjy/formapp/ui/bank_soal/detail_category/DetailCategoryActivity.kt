@@ -30,11 +30,11 @@ class DetailCategoryActivity : AppCompatActivity(), DetailCategoryView {
     }
 
     private fun handleClick(data: ExamModel?) {
-        if (intent.hasExtra("my-exam")) {
+        if(intent.hasExtra("my-exam")){
             val intent = Intent(this, CreateExamActivity::class.java)
             intent.putExtra("data-exam", data)
             startActivity(intent)
-        } else {
+        }else {
             val openIntent = Intent(this, DetailBankSoalActivity::class.java)
             openIntent.putExtra("data-exam", data)
             startActivity(openIntent)
@@ -64,9 +64,9 @@ class DetailCategoryActivity : AppCompatActivity(), DetailCategoryView {
             onBackPressed()
         }
         //populateData(category)
-        if (intent.hasExtra("category")) {
+        if(intent.hasExtra("category")) {
             presenter.getData(category)
-        } else {
+        }else{
             presenter.getMyExamData(SharedPref(this).uid)
         }
     }

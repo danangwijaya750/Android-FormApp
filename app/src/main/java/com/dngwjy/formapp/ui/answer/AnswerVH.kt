@@ -13,25 +13,24 @@ import com.dngwjy.formapp.data.model.QuizModel
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.question_student_view.*
 
-class AnswerVH(override val containerView: View) : RecyclerView.ViewHolder(containerView),
-    LayoutContainer, RvAdapter.BinderData<AnswerModel?> {
+class AnswerVH (override val containerView: View) : RecyclerView.ViewHolder(containerView)
+    , LayoutContainer, RvAdapter.BinderData<AnswerModel?> {
     override fun bindData(data: AnswerModel?, listen: (AnswerModel?) -> Unit, position: Int) {
-        tv_question_number.text = "${position + 1}"
-        when (data!!.quizData.questionType) {
-            "pilgan" -> {
-                ll_pilgan.visibility = View.VISIBLE
-                ll_isian.visibility = View.GONE
-                isPilgan(data.quizData, position, data.answer)
+        tv_question_number.text="${position+1}"
+        when(data!!.quizData.questionType){
+            "pilgan"->{
+                ll_pilgan.visibility=View.VISIBLE
+                ll_isian.visibility=View.GONE
+                isPilgan(data.quizData, position,data.answer)
             }
-            "isian" -> {
-                ll_pilgan.visibility = View.GONE
-                ll_isian.visibility = View.VISIBLE
-                isIsian(data.quizData, position, data.answer)
+            "isian"->{
+                ll_pilgan.visibility=View.GONE
+                ll_isian.visibility=View.VISIBLE
+                isIsian(data.quizData, position,data.answer)
             }
         }
     }
-
-    private fun isPilgan(data: QuizModel, position: Int, answer: String) {
+    private fun isPilgan(data: QuizModel, position: Int,answer:String) {
         tv_pilgan_question.text = data.question
         tv_key_pilgan.setText(data.answer)
         clearRg()
@@ -46,11 +45,9 @@ class AnswerVH(override val containerView: View) : RecyclerView.ViewHolder(conta
             rdBtn.layoutParams = params
             rdBtn.textSize = 20f
             rdBtn.setPadding(10, 10, 10, 10)
-            rdBtn.id = View.generateViewId()
-            rdBtn.background =
-                containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
-            rdBtn.buttonDrawable =
-                containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
+            rdBtn.id=View.generateViewId()
+            rdBtn.background=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
+            rdBtn.buttonDrawable=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
             val states = arrayOf(
                 intArrayOf(android.R.attr.state_checked),
                 intArrayOf(-android.R.attr.state_checked)
@@ -69,7 +66,7 @@ class AnswerVH(override val containerView: View) : RecyclerView.ViewHolder(conta
         }
     }
 
-    private fun clearRg() {
+    private fun clearRg(){
         val count: Int = rg_option.childCount
         if (count > 0) {
             for (i in count - 1 downTo 0) {
@@ -81,7 +78,7 @@ class AnswerVH(override val containerView: View) : RecyclerView.ViewHolder(conta
         }
     }
 
-    private fun isIsian(data: QuizModel, position: Int, answer: String) {
+    private fun isIsian(data: QuizModel, position: Int,answer:String) {
         tv_key_isian.setText(data.answer)
         tv_isian_question.text = data.question
     }

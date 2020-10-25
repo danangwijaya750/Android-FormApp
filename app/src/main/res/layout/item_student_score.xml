@@ -6,11 +6,10 @@
     app:cardCornerRadius="5dp"
     app:cardElevation="5dp"
     app:cardUseCompatPadding="true">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        >
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
@@ -20,8 +19,8 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            />
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
@@ -30,7 +29,8 @@
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_name" />
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            />
 
         <TextView
             android:id="@+id/tv_status"
@@ -47,8 +47,8 @@
             android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_date" />
-
+            app:layout_constraintTop_toBottomOf="@id/tv_date"
+            />
         <TextView
             android:id="@+id/tv_score"
             android:layout_width="wrap_content"
@@ -58,19 +58,20 @@
             android:textSize="32sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            />
         <TextView
             android:id="@+id/tv_selengkapnya"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="10dp"
-            android:text="Selengkapnya"
+           android:text="Selengkapnya"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

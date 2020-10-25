@@ -11,20 +11,12 @@ import kotlinx.android.synthetic.main.item_student_score.*
 
 class IndividualVH(override val containerView: View) : RecyclerView.ViewHolder(containerView),
     LayoutContainer, RvAdapter.BinderData<StudentScoreModel?> {
-    override fun bindData(
-        data: StudentScoreModel?,
-        listen: (StudentScoreModel?) -> Unit,
-        position: Int
-    ) {
-        tv_name.text = data?.studentName
-        tv_score.text = data?.score.toString()
-        tv_date.text = data?.takenAt
-        if (stringToDate(data?.takenAt!!, "dd-MM-yyyy hh:mm:ss").time > stringToDate(
-                CreateExamActivity.endDate,
-                "dd-MM-yyyy hh:mm"
-            ).time
-        ) {
-            tv_status.visibility = View.VISIBLE
+    override fun bindData(data: StudentScoreModel?, listen: (StudentScoreModel?) -> Unit, position: Int) {
+        tv_name.text=data?.studentName
+        tv_score.text=data?.score.toString()
+        tv_date.text=data?.takenAt
+        if(stringToDate(data?.takenAt!!,"dd-MM-yyyy hh:mm:ss").time>stringToDate(CreateExamActivity.endDate,"dd-MM-yyyy hh:mm").time){
+            tv_status.visibility=View.VISIBLE
         }
         tv_selengkapnya.setOnClickListener {
             listen(data)

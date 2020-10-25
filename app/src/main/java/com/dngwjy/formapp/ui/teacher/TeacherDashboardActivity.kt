@@ -81,9 +81,9 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
             startActivity(Intent(this, CategoryBankSoalActivity::class.java))
 
         }
-        tv_ujian_anda_all.setOnClickListener {
-            val callIntent = Intent(this, DetailCategoryActivity::class.java)
-            callIntent.putExtra("my-exam", SharedPref(this).uid)
+        tv_ujian_anda_all.setOnClickListener{
+            val callIntent=Intent(this,DetailCategoryActivity::class.java)
+            callIntent.putExtra("my-exam",SharedPref(this).uid)
             startActivity(callIntent)
         }
         btn_login.setOnClickListener {

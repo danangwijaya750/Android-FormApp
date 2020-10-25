@@ -119,7 +119,7 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
     }
 
     override fun onBackPressed() {
-        if (!uploaded) {
+        if(!uploaded) {
             val builder = AlertDialog.Builder(this)
             builder.apply {
                 title = "Peringatan!"
@@ -136,7 +136,7 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
                     dialog.dismiss()
                 }
             }.create().show()
-        } else {
+        }else{
             super.onBackPressed()
             finish()
         }

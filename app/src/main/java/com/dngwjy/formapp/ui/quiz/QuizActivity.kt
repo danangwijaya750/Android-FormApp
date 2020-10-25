@@ -42,8 +42,8 @@ class QuizActivity : AppCompatActivity() {
         override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder = QuizVH(view)
 
     }
-    private var studentName = ""
-    private var examAttemptId = ""
+    private var studentName=""
+    private var examAttemptId=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +56,7 @@ class QuizActivity : AppCompatActivity() {
             adapter = quizAdapter
             layoutManager = layManager
         }
-        studentName = SharedPref(this).userName
+        studentName=SharedPref(this).userName
 
         showData()
     }
@@ -166,13 +166,13 @@ class QuizActivity : AppCompatActivity() {
             "studentId" to SharedPref(this).uid,
             "examId" to idExam,
             "score" to scoreGotten,
-            "takenAt" to convertDate(System.currentTimeMillis(), "dd-MM-yyyy hh:mm:ss"),
+            "takenAt" to convertDate(System.currentTimeMillis(),"dd-MM-yyyy hh:mm:ss"),
             "studentName" to studentName
         )
         db.collection("col_student_score")
             .add(data)
             .addOnSuccessListener {
-                examAttemptId = it.id
+                examAttemptId=it.id
                 uploadAttempt()
             }
             .addOnFailureListener {

@@ -14,8 +14,8 @@ data class AnswerModel(
     var quizData: QuizModel,
     var answer: String,
     var result: Boolean,
-    var studentName: String,
-    var examAttemptScoreId: String
-) : Parcelable {
-    constructor() : this("", 0, "", "", QuizModel(), "", false, "", "")
+    var studentName:String,
+    var examAttemptScoreId:String
+):Parcelable {
+    constructor() : this("", 0, "", "", QuizModel(), "", false,"","")
 }

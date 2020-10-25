@@ -70,7 +70,7 @@ class StudentDashboardActivity : AppCompatActivity() {
             layManager.orientation=LinearLayoutManager.VERTICAL
             layoutManager=layManager
         }
-        btn_profile.text = SharedPref(this).userName[0].toString()
+        btn_profile.text= SharedPref(this).userName[0].toString()
         btn_profile.setOnClickListener {
             val ballon = Balloon.Builder(this)
                 .setLayout(R.layout.layout_logout_dialog)

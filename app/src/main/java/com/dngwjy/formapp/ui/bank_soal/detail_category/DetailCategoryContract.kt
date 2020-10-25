@@ -27,7 +27,6 @@ class DetailCategoryPresenter(
                 logE(it.localizedMessage)
             }
     }
-
     fun getMyExamData(uid: String) {
         db.collection("col_exam")
             .whereEqualTo("uid", uid)
