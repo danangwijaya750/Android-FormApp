@@ -45,7 +45,7 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         var totalScore = 0
         var bitmap: Bitmap? = null
         var questionPositions = 0
-        var tags = mutableListOf<String>()
+        var tags = mutableListOf<String?>()
         var uploaded = false
         var examId = ""
 
@@ -76,6 +76,8 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
             uploaded = true
             examId = dataExam.id
             examTitle = dataExam.title
+            tags.clear()
+            tags.addAll(dataExam.tags)
             presenter.getQuizData(examId)
         }
 

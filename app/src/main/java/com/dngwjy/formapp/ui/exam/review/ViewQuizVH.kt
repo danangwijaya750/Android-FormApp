@@ -79,6 +79,7 @@ class ViewQuizVH (override val containerView: View): RecyclerView.ViewHolder(con
 
     private fun isIsian(data: QuizModel, position: Int, listen: (QuizModel) -> Unit) {
         tv_isian_question.text = data.question
+        et_jawaban.setText(data.answer)
     }
 
 }

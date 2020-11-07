@@ -21,7 +21,7 @@ class CreateExamPresenter(private val db: FirebaseFirestore, private val view: C
         image: ByteArray?,
         uid: String,
         kelas: String,
-        tags: MutableList<String>
+        tags: MutableList<String?>
     ) {
         view.isLoading(true)
         val data = hashMapOf<String, Any>(
@@ -37,7 +37,8 @@ class CreateExamPresenter(private val db: FirebaseFirestore, private val view: C
             "startDate" to startDate,
             "endDate" to endDate,
             "uid" to uid,
-            "kelas" to kelas
+            "kelas" to kelas,
+            "tags" to tags
         )
         db.collection("col_exam")
             .add(data)

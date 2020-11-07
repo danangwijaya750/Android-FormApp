@@ -8,14 +8,19 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputType
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
+import com.dngwjy.formapp.util.logE
 import kotlinx.android.synthetic.main.fragment_share.*
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -63,6 +68,25 @@ class ShareExamFragment : Fragment() {
         iv_image_exam.setOnClickListener {
             pickImage()
         }
+        et_tags.run {
+            inputType=InputType.TYPE_CLASS_TEXT
+            imeOptions=EditorInfo.IME_ACTION_DONE
+
+            setOnEditorActionListener(object : TextView.OnEditorActionListener {
+                override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        val tags = et_tags.text.toString().split("#").toTypedArray().toMutableList()
+                        tags.removeAt(0)
+                        CreateExamActivity.tags.clear()
+                        CreateExamActivity.tags.addAll(tags)
+                        logE("tags size ${CreateExamActivity.tags.size}")
+                        return true
+                    }
+                    return true
+                }
+            })
+        }
+
         sp_akses.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -162,8 +186,18 @@ class ShareExamFragment : Fragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
-            et_score.setText(CreateExamActivity.totalScore.toString())
             CreateExamActivity.fragmentPosition = 2
+            CreateExamActivity.totalScore = CreateExamActivity.questionList.sumBy { it!!.score }
+            et_score.setText(CreateExamActivity.totalScore.toString())
+            if (CreateExamActivity.tags.size > 0) {
+                et_tags.setText(
+                    CreateExamActivity.tags.joinToString(
+                        prefix = "#",
+                        postfix = "",
+                        separator = "#"
+                    )
+                )
+            }
         }
     }
 }

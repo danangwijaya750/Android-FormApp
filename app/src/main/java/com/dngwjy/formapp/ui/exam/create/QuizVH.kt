@@ -1,13 +1,12 @@
 package com.dngwjy.formapp.ui.exam.create
 
 import android.app.AlertDialog
+import android.content.res.ColorStateList
 import android.text.InputType
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.base.RvAdapter
@@ -19,6 +18,9 @@ import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.question_layout.*
+import kotlinx.android.synthetic.main.question_layout.ll_isian
+import kotlinx.android.synthetic.main.question_layout.ll_pilgan
+import kotlinx.android.synthetic.main.question_layout.tv_question_number
 
 
 class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(containerView)
@@ -30,28 +32,11 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
             changeScore(data, listen)
         }
         bt_kunci.setOnClickListener {
-            val builder = AlertDialog.Builder(containerView.context)
-            val input = EditText(containerView.context)
-            val lp = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-            input.layoutParams = lp
-            input.setText(data.answer)
-            builder.apply {
-                setTitle("Ubah Kunci Jawaban")
-                setView(input)
-                setPositiveButton("Simpan") { dialog, which ->
-                    changeAnswer(input.text.toString(),data, listen)
-                    dialog.dismiss()
-                }
-                setNegativeButton("Batal") { dialog, which ->
-                    dialog.dismiss()
-                    listen(data)
-                }
-            }
-            val alert = builder.create()
-            alert.show()
+          if(data.questionType=="pilgan"){
+              keyPilgan(data,listen)
+          }else{
+              keyText(data,listen)
+          }
         }
         when (data.questionType) {
             "pilgan" -> {
@@ -64,12 +49,14 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
                 ll_isian.visibility = View.VISIBLE
                 ll_pilgan.visibility = View.GONE
                 ll_essay.visibility = View.GONE
+                et_jawaban.visibility=View.GONE
                 isIsian(data, position, listen)
             }
             "essay"->{
                 ll_isian.visibility = View.GONE
                 ll_pilgan.visibility = View.GONE
                 ll_essay.visibility=View.VISIBLE
+                et_jawaban.visibility=View.GONE
                 isEssay(data, position, listen)
             }
         }
@@ -121,6 +108,91 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
                 }
         }
     }
+    private fun keyText(data:QuizModel,listen: (QuizModel) -> Unit){
+        val builder = AlertDialog.Builder(containerView.context)
+        val input = EditText(containerView.context)
+        val lp = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        input.layoutParams = lp
+        input.setText(data.answer)
+        builder.apply {
+            setTitle("Ubah Kunci Jawaban")
+            setView(input)
+            setPositiveButton("Simpan") { dialog, which ->
+                changeAnswer(input.text.toString(),data, listen)
+                dialog.dismiss()
+            }
+            setNegativeButton("Batal") { dialog, which ->
+                dialog.dismiss()
+                listen(data)
+            }
+        }
+        val alert = builder.create()
+        alert.show()
+    }
+
+    private fun keyPilgan(data:QuizModel,listen: (QuizModel) -> Unit){
+        val builder = AlertDialog.Builder(containerView.context)
+        val input = RadioGroup(containerView.context)
+        val lp = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        var answer=""
+        input.layoutParams = lp
+        input.removeAllViewsInLayout()
+        data.choice.forEach {value->
+            val rdBtn = RadioButton(containerView.context)
+            val params =
+                RadioGroup.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            params.setMargins(2, 10, 2, 10)
+            rdBtn.layoutParams = params
+            rdBtn.textSize = 20f
+            rdBtn.setPadding(10, 10, 10, 10)
+            rdBtn.id=View.generateViewId()
+            rdBtn.background=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
+            rdBtn.buttonDrawable=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
+            val states = arrayOf(
+                intArrayOf(android.R.attr.state_checked),
+                intArrayOf(-android.R.attr.state_checked)
+            )
+
+            val colors = intArrayOf(
+                containerView.context.resources.getColor(R.color.colorWhite),
+                containerView.context.resources.getColor(R.color.colorPrimary)
+            )
+            val myList = ColorStateList(states, colors)
+            rdBtn.setTextColor(myList)
+            rdBtn.text = value
+            if (value == data.answer) rdBtn.isChecked = true
+            rdBtn.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    answer=value
+                }
+            }
+            input.addView(rdBtn)
+        }
+        builder.apply {
+            setTitle("Ubah Kunci Jawaban")
+            setView(input)
+            setPositiveButton("Simpan") { dialog, which ->
+                changeAnswer(answer,data, listen)
+                dialog.dismiss()
+            }
+            setNegativeButton("Batal") { dialog, which ->
+                dialog.dismiss()
+                listen(data)
+            }
+        }
+        val alert = builder.create()
+        alert.show()
+    }
+
 
     private fun isPilgan(data: QuizModel, position: Int, listen: (QuizModel) -> Unit) {
         et_pilgan_question.text = data.question
@@ -158,6 +230,10 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
                         return false
                     }
                 })
+            }
+            if(value=="Pilihan Jawaban"){
+                rdBtn.setText("")
+                rdBtn.hint=value
             }
 //            rdBtn.setOnClickListener {
 //                changeAnswer(index, value, position, data, listen)
@@ -245,6 +321,10 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
         )
         input.layoutParams = lp
         input.setText(data.question)
+        if(data.question=="Masukan Pertanyaan..."){
+            input.setText("")
+            input.hint="Masukan Pertanyaan..."
+        }
         builder.apply {
             setTitle("Ubah Pertanyaan")
             setView(input)
