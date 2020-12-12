@@ -18,9 +18,6 @@ import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.question_layout.*
-import kotlinx.android.synthetic.main.question_layout.ll_isian
-import kotlinx.android.synthetic.main.question_layout.ll_pilgan
-import kotlinx.android.synthetic.main.question_layout.tv_question_number
 
 
 class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(containerView)
@@ -96,6 +93,7 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
                     val id = CreateQuizFragment.questionCount
                     CreateExamActivity.questionList.add(
                         QuizModel(
+                            "",
                             id,
                             data.question,
                             data.choice,
@@ -195,22 +193,55 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
 
 
     private fun isPilgan(data: QuizModel, position: Int, listen: (QuizModel) -> Unit) {
-        et_pilgan_question.text = data.question
-        et_pilgan_question.setOnClickListener {
-            changeQuestion(data, listen)
+        et_pilgan_question.setText("")
+        if (data.question == "Pertanyaan...") {
+            et_pilgan_question.hint = data.question
+        } else {
+            et_pilgan_question.setText(data.question)
+        }
+        et_pilgan_question.run {
+            setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    changeQuestion(data, listen, et_pilgan_question.text.toString())
+                    return@setOnEditorActionListener true
+                }
+                return@setOnEditorActionListener false
+            }
         }
 
         clearRg()
         data.choice.forEachIndexed { index, value ->
             val rdBtn = EditText(containerView.context)
+            val tvDel = TextView(containerView.context)
             val params = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
+            val params2 = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            val params3 = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            val linearLayout = LinearLayout(containerView.context)
             params.setMargins(2, 10, 2, 10)
+            linearLayout.layoutParams = params
+            linearLayout.orientation = LinearLayout.HORIZONTAL
+            tvDel.run {
+                params.setMargins(10, 10, 2, 10)
+                layoutParams = params2
+                text = "X"
+                id = View.generateViewId()
+                textSize = 18f
+                setOnClickListener {
+                    removeChoice(data, listen, index)
+                }
+            }
             rdBtn.run {
                 params.setMargins(2, 10, 2, 10)
-                layoutParams = params
+                layoutParams = params3
                 setPadding(10, 10, 10, 10)
                 id = View.generateViewId()
                 setText(value)
@@ -231,40 +262,30 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
                     }
                 })
             }
-            if(value=="Pilihan Jawaban"){
+            if (value == "Pilihan Jawaban") {
                 rdBtn.setText("")
-                rdBtn.hint=value
+                rdBtn.hint = value
             }
-//            rdBtn.setOnClickListener {
-//                changeAnswer(index, value, position, data, listen)
-//            }
-
-            //rdBtn.background=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
-//            val states = arrayOf(
-//                intArrayOf(android.R.attr.state_checked),
-//                intArrayOf(-android.R.attr.state_checked)
-//            )
-//
-//            val colors = intArrayOf(
-//                containerView.context.resources.getColor(R.color.colorWhite),
-//                containerView.context.resources.getColor(R.color.colorPrimary)
-//            )
-//            val myList = ColorStateList(states, colors)
-//            rdBtn.setTextColor(myList)
-//            if (data.answer == value){
-//
-//            }
-//            else{
-//
-//            }
-
-
-            ll_option.addView(rdBtn)
+            linearLayout.addView(tvDel)
+            linearLayout.addView(rdBtn)
+            ll_option.addView(linearLayout)
         }
         tv_add_choice.setOnClickListener {
             data.choice.add("Pilihan Jawaban")
             listen(data)
         }
+    }
+
+    private fun removeChoice(data: QuizModel, listen: (QuizModel) -> Unit, id: Int) {
+        var idSoal = 0
+        CreateExamActivity.questionList.forEachIndexed { idx, quizModel ->
+            if (quizModel!!.id == data.id) {
+                idSoal = idx
+                CreateExamActivity.questionList[idSoal]!!.choice.removeAt(id)
+                return@forEachIndexed
+            }
+        }
+        listen(data)
     }
 
     private fun changeScore(data: QuizModel, listen: (QuizModel) -> Unit) {
@@ -311,43 +332,16 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
         ll_option.removeAllViewsInLayout()
     }
 
-    private fun changeQuestion(data: QuizModel, listen: (QuizModel) -> Unit) {
-
-        val builder = AlertDialog.Builder(containerView.context)
-        val input = EditText(containerView.context)
-        val lp = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
-        )
-        input.layoutParams = lp
-        input.setText(data.question)
-        if(data.question=="Masukan Pertanyaan..."){
-            input.setText("")
-            input.hint="Masukan Pertanyaan..."
-        }
-        builder.apply {
-            setTitle("Ubah Pertanyaan")
-            setView(input)
-            setPositiveButton("Simpan") { dialog, which ->
-                var id = 0
-                CreateExamActivity.questionList.forEachIndexed { index, it ->
-                    if (it!!.id == data.id) {
-                        id = index
-                        CreateExamActivity.questionList[id]!!.question = input.text.toString()
-                        return@forEachIndexed
-                    }
-                }
-                dialog.dismiss()
-                listen(data)
-            }
-            setNegativeButton("Batal") { dialog, which ->
-                dialog.dismiss()
-                listen(data)
+    private fun changeQuestion(data: QuizModel, listen: (QuizModel) -> Unit, input: String) {
+        var id = 0
+        CreateExamActivity.questionList.forEachIndexed { index, it ->
+            if (it!!.id == data.id) {
+                id = index
+                CreateExamActivity.questionList[id]!!.question = input
+                return@forEachIndexed
             }
         }
-        val alert = builder.create()
-        alert.show()
-
+        listen(data)
     }
 
     private fun changging(
@@ -426,15 +420,37 @@ class QuizVH(override val containerView: View) : RecyclerView.ViewHolder(contain
     }
 
     private fun isIsian(data: QuizModel, position: Int, listen: (QuizModel) -> Unit) {
-        et_isian_question.text = data.question
-        et_isian_question.setOnClickListener {
-            changeQuestion(data, listen)
+        et_isian_question.setText("")
+        if (data.question == "Pertanyaan...") {
+            et_isian_question.hint = data.question
+        } else {
+            et_isian_question.setText(data.question)
+        }
+        et_isian_question.run {
+            setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    changeQuestion(data, listen, et_isian_question.text.toString())
+                    return@setOnEditorActionListener true
+                }
+                return@setOnEditorActionListener false
+            }
         }
     }
     private fun isEssay(data: QuizModel, position: Int, listen: (QuizModel) -> Unit) {
-        et_essay_question.text = data.question
-        et_essay_question.setOnClickListener {
-            changeQuestion(data, listen)
+        et_essay_question.setText("")
+        if (data.question == "Pertanyaan...") {
+            et_essay_question.hint = data.question
+        } else {
+            et_essay_question.setText(data.question)
+        }
+        et_essay_question.run {
+            setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    changeQuestion(data, listen, et_essay_question.text.toString())
+                    return@setOnEditorActionListener true
+                }
+                return@setOnEditorActionListener false
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.Window
+import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -82,8 +83,8 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
 
         }
         tv_ujian_anda_all.setOnClickListener{
-            val callIntent=Intent(this,DetailCategoryActivity::class.java)
-            callIntent.putExtra("my-exam",SharedPref(this).uid)
+            val callIntent = Intent(this, DetailCategoryActivity::class.java)
+            callIntent.putExtra("my-exam", SharedPref(this).uid)
             startActivity(callIntent)
         }
         btn_login.setOnClickListener {
@@ -91,6 +92,15 @@ class TeacherDashboardActivity : AppCompatActivity(), TeacherDashboardView {
         }
         btn_register.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
+        }
+        et_search.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val intent = Intent(this, DetailCategoryActivity::class.java)
+                intent.putExtra("search", et_search.text.toString())
+                startActivity(intent)
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
         }
 
         myExamAdapter.notifyDataSetChanged()

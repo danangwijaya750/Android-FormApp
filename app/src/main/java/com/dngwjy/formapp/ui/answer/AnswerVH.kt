@@ -60,7 +60,7 @@ class AnswerVH (override val containerView: View) : RecyclerView.ViewHolder(cont
             val myList = ColorStateList(states, colors)
             rdBtn.setTextColor(myList)
             rdBtn.text = value
-            if (value == data.answer) rdBtn.isChecked = true
+            if (value == answer) rdBtn.isChecked = true
             rdBtn.isEnabled = false
             rg_option.addView(rdBtn)
         }
@@ -79,7 +79,7 @@ class AnswerVH (override val containerView: View) : RecyclerView.ViewHolder(cont
     }
 
     private fun isIsian(data: QuizModel, position: Int,answer:String) {
-        tv_key_isian.setText(data.answer)
+        tv_key_isian.setText(answer)
         tv_isian_question.text = data.question
     }
 }

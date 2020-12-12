@@ -110,15 +110,7 @@ class TiapSoalVH(override val containerView: View) : RecyclerView.ViewHolder(con
     }
 
     private fun clearRg() {
-        val count: Int = rg_option.childCount
-        if (count > 0) {
-            for (i in count - 1 downTo 0) {
-                val o: View = rg_option.getChildAt(i)
-                if (o is RadioButton) {
-                    rg_option.removeViewAt(i)
-                }
-            }
-        }
+       rg_option.removeAllViewsInLayout()
     }
 
     private fun isIsian(data: QuizDomain, position: Int, listen: (QuizDomain) -> Unit) {

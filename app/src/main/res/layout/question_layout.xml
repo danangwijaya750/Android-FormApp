@@ -44,7 +44,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_question_number"
             app:layout_constraintTop_toTopOf="parent">
-            <TextView
+
+            <EditText
+                android:imeOptions="actionDone"
+                android:inputType="text"
                 android:id="@+id/et_pilgan_question"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -83,9 +86,11 @@
             app:layout_constraintStart_toEndOf="@id/tv_question_number"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
+            <EditText
                 android:id="@+id/et_isian_question"
                 android:layout_width="fill_parent"
+                android:imeOptions="actionDone"
+                android:inputType="text"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="Masukan Pertanyaan"
@@ -112,8 +117,10 @@
             app:layout_constraintStart_toEndOf="@id/tv_question_number"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
+            <EditText
                 android:id="@+id/et_essay_question"
+                android:imeOptions="actionDone"
+                android:inputType="text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"

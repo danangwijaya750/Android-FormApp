@@ -88,7 +88,9 @@ class SignUpActivity : AppCompatActivity() {
         db.collection(role).add(data)
             .addOnSuccessListener {
                 toast("Registrasi Berhasil")
-                pg_loading.visibility=View.GONE
+                pg_loading.visibility = View.GONE
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
             }
             .addOnFailureListener {
                 toast("Terjadi Kesalahan")

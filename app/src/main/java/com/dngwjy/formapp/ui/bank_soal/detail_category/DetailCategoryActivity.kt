@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.Window
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.dngwjy.formapp.data.local.SharedPref
 import com.dngwjy.formapp.data.model.ExamModel
 import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
+import com.dngwjy.formapp.util.logE
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_detail_category.*
 
@@ -26,7 +28,6 @@ class DetailCategoryActivity : AppCompatActivity(), DetailCategoryView {
         override fun layoutId(position: Int, obj: ExamModel?): Int = R.layout.item_exam
 
         override fun viewHolder(view: View, viewType: Int): RecyclerView.ViewHolder = ExamVH(view)
-
     }
 
     private fun handleClick(data: ExamModel?) {
@@ -37,6 +38,9 @@ class DetailCategoryActivity : AppCompatActivity(), DetailCategoryView {
         }else {
             val openIntent = Intent(this, DetailBankSoalActivity::class.java)
             openIntent.putExtra("data-exam", data)
+            if (intent.hasExtra("caller")) {
+                openIntent.putExtra("caller", "add")
+            }
             startActivity(openIntent)
             if (intent.hasExtra("caller")) {
                 finish()
@@ -64,106 +68,30 @@ class DetailCategoryActivity : AppCompatActivity(), DetailCategoryView {
             onBackPressed()
         }
         //populateData(category)
-        if(intent.hasExtra("category")) {
+        if (intent.hasExtra("category")) {
             presenter.getData(category)
-        }else{
+        } else if (intent.hasExtra("search")) {
+            if (SharedPref(this).userRole == "teacher") {
+                presenter.searchData(intent.getStringExtra("search"), "Publik")
+            } else {
+                presenter.searchData(intent.getStringExtra("search"), "Private")
+            }
+        } else {
             presenter.getMyExamData(SharedPref(this).uid)
+        }
+        et_search.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (SharedPref(this).userRole == "teacher") {
+                    presenter.searchData(et_search.text.toString(), "Publik")
+                } else {
+                    presenter.searchData(et_search.text.toString(), "Private")
+                }
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
         }
     }
 
-//    private fun populateData(category: String){
-//        listExam.clear()
-//        when(category){
-//            "Bahasa Indonesia"->{getBIndo()}
-//            "Bahasa Inggris"->{getBIng()}
-//            "Ilmu Pengetahuan Alam"->{getIpa()}
-//            "Ilmu Pengetahuan Sosial"->{getIps()}
-//            "Matematika"->{getMatematika()}
-//        }
-//        rvAdapter.notifyDataSetChanged()
-//    }
-
-    //    private fun getMatematika(){
-//        listExam.add(
-//            ExamModel(
-//                "3",
-//                "",
-//                "Penjumlahan",
-//                "ini ujian",
-//                "Matematika",
-//                4.5,
-//                mutableListOf("#jumlah", "#tambah", "#matematika"),
-//                48,
-//                60,
-//                mutableListOf()
-//            )
-//        )
-//    }
-//    private fun getIps(){
-//        listExam.add(
-//            ExamModel(
-//                "2",
-//                "",
-//                "Interaksi Sosial",
-//                "ini ujian",
-//                "Ilmu Pengetahuan Sosial",
-//                4.2,
-//                mutableListOf("#interaksi", "#keragaman"),
-//                38,
-//                80,
-//                mutableListOf()
-//            )
-//        )
-//    }
-//    private fun getIpa(){
-//        listExam.add(
-//            ExamModel(
-//                "1",
-//                "",
-//                "Makhluk Hidup",
-//                "ini ujian",
-//                "Ilmu Pengetahuan Alam",
-//                4.8,
-//                mutableListOf("#hewan", "#tumbuhan", "#tubuh"),
-//                50,
-//                80,
-//                mutableListOf()
-//            )
-//        )
-//    }
-//    private fun getBIndo(){
-//        listExam.add(
-//            ExamModel(
-//                "4",
-//                "",
-//                "Pantun",
-//                "ini ujian",
-//                "Bahasa Indonesia",
-//                4.7,
-//                mutableListOf("#pantun", "#bindo", "#sajak"),
-//                41,
-//                76,
-//                mutableListOf()
-//            )
-//        )
-//        listExam.add(
-//            ExamModel(
-//                "5",
-//                "",
-//                "Cerpen",
-//                "ini ujian",
-//                "Bahasa Indonesia",
-//                4.4,
-//                mutableListOf("#cerita", "#pendek"),
-//                53,
-//                84,
-//                mutableListOf()
-//            )
-//        )
-//    }
-    private fun getBIng() {
-
-    }
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -171,11 +99,14 @@ class DetailCategoryActivity : AppCompatActivity(), DetailCategoryView {
     }
 
     override fun onLoading(state: Boolean) {
-
+        when (state) {
+            true -> pg_loading.visibility = View.VISIBLE
+            else -> pg_loading.visibility = View.GONE
+        }
     }
 
     override fun onError(msg: String) {
-
+        logE(msg)
     }
 
     override fun showResult(result: List<ExamModel?>) {

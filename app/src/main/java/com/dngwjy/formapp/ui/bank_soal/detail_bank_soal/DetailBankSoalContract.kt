@@ -3,6 +3,7 @@ package com.dngwjy.formapp.ui.bank_soal.detail_bank_soal
 import com.dngwjy.formapp.data.model.ExamModel
 import com.dngwjy.formapp.data.model.QuizModel
 import com.dngwjy.formapp.util.logE
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 class DetailBankSoalPresenter(
@@ -31,6 +32,17 @@ class DetailBankSoalPresenter(
             }
     }
 
+    fun getUpdatePuzzle(exam: QuizModel, examId: String) {
+        db.collection("col_exam")
+            .document(examId).update("puzzles", FieldValue.increment(1))
+            .addOnSuccessListener {
+                view.successIncrement(exam)
+            }
+            .addOnFailureListener {
+                view.onError(it.localizedMessage)
+            }
+    }
+
     fun getExamData(examId: String) {
         view.onLoading(true)
         db.collection("col_exam")
@@ -50,4 +62,5 @@ interface DetailBankSoalView {
     fun onError(msg: String)
     fun showResult(result: List<QuizModel?>)
     fun showExamData(result: ExamModel?)
+    fun successIncrement(data: QuizModel)
 }

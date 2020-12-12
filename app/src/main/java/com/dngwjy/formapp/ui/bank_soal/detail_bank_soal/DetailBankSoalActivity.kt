@@ -25,6 +25,11 @@ class DetailBankSoalActivity : AppCompatActivity(), DetailBankSoalView {
     private val questions = mutableListOf<QuizModel?>()
     private val presenter = DetailBankSoalPresenter(FirebaseFirestore.getInstance(), this)
     private val fAuth = FirebaseAuth.getInstance()
+
+    companion object {
+        var importCaller = ""
+    }
+
     private lateinit var dataExam: ExamModel
     private val rvAdapter = object : RvAdapter<QuizModel?>(questions, {
         handleClick(it!!)
@@ -38,12 +43,9 @@ class DetailBankSoalActivity : AppCompatActivity(), DetailBankSoalView {
 
 
     private fun handleClick(data:QuizModel){
+        logE(CreateQuizFragment.questionCount.toString())
         if(fAuth.currentUser!=null && SharedPref(this).userRole=="teacher"){
-            CreateExamActivity.questionList
-                .add(QuizModel(CreateQuizFragment.questionCount,
-                    data.question,data.choice,data.questionType,data.answer,data.score))
-            CreateQuizFragment.questionCount++
-            finish()
+            presenter.getUpdatePuzzle(data, dataExam.id)
         }
     }
 
@@ -54,15 +56,23 @@ class DetailBankSoalActivity : AppCompatActivity(), DetailBankSoalView {
         supportActionBar?.hide()
 
         rv_exam_question.apply {
-            adapter=rvAdapter
-            val layMan=LinearLayoutManager(this@DetailBankSoalActivity)
-            layMan.orientation=LinearLayoutManager.VERTICAL
-            layoutManager=layMan
+            adapter = rvAdapter
+            val layMan = LinearLayoutManager(this@DetailBankSoalActivity)
+            layMan.orientation = LinearLayoutManager.VERTICAL
+            layoutManager = layMan
         }
 
-        if(intent.hasExtra("exam-id")){
+        if (intent.hasExtra("caller")) {
+            importCaller = "import"
+        } else {
+            importCaller = "n"
+        }
+
+
+        if (intent.hasExtra("exam-id")) {
             presenter.getExamData(intent.extras!!.get("exam-id") as String)
-        }else{
+            importCaller = "n"
+        } else {
             showData(intent.extras!!.get("data-exam") as ExamModel)
         }
 
@@ -100,6 +110,9 @@ class DetailBankSoalActivity : AppCompatActivity(), DetailBankSoalView {
         tv_exam_name.text = data!!.title
         tv_category.text = data.category
         tv_subtitle.text = data.desc
+        tv_exam_ratings.text = data.rating.toString()
+        tv_exam_play.text = data.played.toString()
+        tv_exam_puzzle.text = data.played.toString()
         logE(data.image)
         Glide.with(this)
             .load(data.image)
@@ -142,13 +155,27 @@ class DetailBankSoalActivity : AppCompatActivity(), DetailBankSoalView {
     override fun showResult(result: List<QuizModel?>) {
         questions.clear()
         questions.addAll(result)
+        questions.sortBy { it!!.id }
         dataExam.quizes.clear()
         dataExam.quizes.addAll(result)
+        dataExam.quizes.sortBy { it!!.id }
         rvAdapter.notifyDataSetChanged()
     }
 
     override fun showExamData(result: ExamModel?) {
         showData(result)
+    }
+
+    override fun successIncrement(data: QuizModel) {
+        CreateExamActivity.questionList
+            .add(
+                QuizModel(
+                    "a", CreateQuizFragment.questionCount,
+                    data.question, data.choice, data.questionType, data.answer, data.score
+                )
+            )
+        CreateQuizFragment.questionCount++
+        finish()
     }
 
 }

@@ -83,9 +83,7 @@ class CreateQuizFragment : Fragment() {
             .setBalloonAnimation(BalloonAnimation.CIRCULAR)
             .build()
         ll_add.setOnClickListener {
-            if(!CreateExamActivity.uploaded) {
-                ballon.showAlignBottom(it)
-            }
+            ballon.showAlignBottom(it)
         }
         ballon.getContentView().findViewById<LinearLayout>(R.id.ll_pilgan)
             .setOnClickListener {
@@ -101,7 +99,10 @@ class CreateQuizFragment : Fragment() {
             .setOnClickListener {
                 val intent = Intent(context!!, DetailCategoryActivity::class.java)
                 intent.putExtra("category", CreateExamActivity.kategori)
-                intent.putExtra("caller","add")
+                intent.putExtra("caller", "add")
+                if (CreateExamActivity.uploaded) {
+                    questionCount = CreateExamActivity.questionList.last()!!.id + 1
+                }
                 startActivity(intent)
             }
     }
@@ -114,9 +115,13 @@ class CreateQuizFragment : Fragment() {
 
     private fun addQuestions(type: String) {
         logE(type)
+        if (CreateExamActivity.uploaded) {
+            questionCount = CreateExamActivity.questionList.last()!!.id + 1
+        }
         CreateExamActivity.questionList.add(
             QuizModel(
-                questionCount, "Masukan Pertayaan...",
+                "a",
+                questionCount, "Pertanyaan...",
                 mutableListOf("Pilihan Jawaban", "Pilihan Jawaban"), type, "", 10
             )
         )

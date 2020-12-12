@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.Window
+import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.dngwjy.formapp.data.local.SharedPref
 import com.dngwjy.formapp.data.model.ExamModel
 import com.dngwjy.formapp.ui.auth.login.LoginActivity
 import com.dngwjy.formapp.ui.bank_soal.detail_bank_soal.DetailBankSoalActivity
+import com.dngwjy.formapp.ui.bank_soal.detail_category.DetailCategoryActivity
 import com.dngwjy.formapp.util.logE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,6 +23,10 @@ import com.skydoves.balloon.ArrowOrientation
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import kotlinx.android.synthetic.main.activity_student_dashboard.*
+import kotlinx.android.synthetic.main.activity_student_dashboard.et_search
+import kotlinx.android.synthetic.main.activity_student_dashboard.rv_ujian_anda
+import kotlinx.android.synthetic.main.activity_student_dashboard.rv_ujian_populer
+import kotlinx.android.synthetic.main.activity_teacher_dashboard.*
 
 class StudentDashboardActivity : AppCompatActivity() {
     private val db=FirebaseFirestore.getInstance()
@@ -57,7 +63,6 @@ class StudentDashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_student_dashboard)
         supportActionBar?.hide()
         pref= SharedPref(this)
-
         rv_ujian_populer.apply {
             adapter=popularAdapter
             val layManager=LinearLayoutManager(this@StudentDashboardActivity)
@@ -86,14 +91,23 @@ class StudentDashboardActivity : AppCompatActivity() {
             ballon.getContentView().findViewById<LinearLayout>(R.id.ll_keluar)
                 .setOnClickListener {
                     FirebaseAuth.getInstance().signOut()
-                    pref.userRole=""
-                    pref.userClass=""
-                    pref.userEmail=""
-                    pref.userName=""
-                    pref.userPass=""
-                    startActivity(Intent(this,LoginActivity::class.java))
+                    pref.userRole = ""
+                    pref.userClass = ""
+                    pref.userEmail = ""
+                    pref.userName = ""
+                    pref.userPass = ""
+                    startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                 }
+        }
+        et_search.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val intent = Intent(this, DetailCategoryActivity::class.java)
+                intent.putExtra("search", et_search.text.toString())
+                startActivity(intent)
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
         }
 
         getRelatedExam()

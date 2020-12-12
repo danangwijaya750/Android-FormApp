@@ -48,6 +48,7 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         var tags = mutableListOf<String?>()
         var uploaded = false
         var examId = ""
+        var imageUrl = ""
 
     }
 
@@ -76,8 +77,15 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
             uploaded = true
             examId = dataExam.id
             examTitle = dataExam.title
+            startDate = dataExam.startDate
+            endDate = dataExam.endDate
             tags.clear()
             tags.addAll(dataExam.tags)
+            imageUrl = dataExam.image
+            accessType = dataExam.accessType
+            kategori = dataExam.category
+            keterangan = dataExam.desc
+            logE(examId)
             presenter.getQuizData(examId)
         }
 
@@ -85,7 +93,11 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         iv_back.setOnClickListener { onBackPressed() }
         iv_next.setOnClickListener {
             if (fragmentPosition == 2 && !uploaded) {
+                logE("add")
                 uploadExamData()
+            } else if (fragmentPosition == 2 && uploaded) {
+                logE("update")
+                updateExamData()
             }
         }
 
@@ -144,11 +156,32 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
         }
     }
 
-    fun uploadExamData() {
+    private fun uploadExamData() {
         val baos = ByteArrayOutputStream()
         bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data: ByteArray? = baos.toByteArray()
         presenter.uploadExam(
+            examTitle,
+            kategori,
+            keterangan,
+            "",
+            accessType,
+            "",
+            startDate,
+            endDate,
+            data,
+            fAuth.currentUser!!.uid,
+            SharedPref(this).userClass,
+            tags
+        )
+    }
+
+    private fun updateExamData() {
+        val baos = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data: ByteArray? = baos.toByteArray()
+        presenter.updateExam(
+            examId,
             examTitle,
             kategori,
             keterangan,
@@ -174,7 +207,23 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
             showMessage(examId)
         }
     }
-    private fun showMessage(examId:String){
+
+    private fun updateQuestions(examId: String) {
+        if (questionPositions < questionList.size) {
+            presenter.updateQuestion(
+                examId,
+                questionList[questionPositions]!!,
+                questionList[questionPositions]!!.docId
+            )
+            questionPositions++
+        } else {
+            logD("Questions uploaded")
+            isLoading(false)
+            showMessage(examId)
+        }
+    }
+
+    private fun showMessage(examId: String) {
         val alertDialogBuilder = AlertDialog.Builder(this)
         val alertLayout = layoutInflater.inflate(R.layout.layout_succes_upload, null)
         alertDialogBuilder.setView(alertLayout)
@@ -207,7 +256,11 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
     }
 
     override fun showUploadExamResult(data: String) {
-        uploadQuestions(data)
+        if (!uploaded) {
+            uploadQuestions(data)
+        } else {
+            updateQuestions(data)
+        }
     }
 
 
@@ -218,6 +271,9 @@ class CreateExamActivity : AppCompatActivity(), CreateQuizFragment.OnChangedFrag
     override fun showGetQuizResult(data: List<QuizModel?>) {
         questionList.clear()
         questionList.addAll(data)
+        questionList.forEach {
+            logE(it!!.docId)
+        }
         CreateQuizFragment.rvAdapter.notifyDataSetChanged()
         ReviewExamFragment.rvAdapter.notifyDataSetChanged()
     }

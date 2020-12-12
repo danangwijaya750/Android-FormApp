@@ -53,6 +53,63 @@ class CreateExamPresenter(private val db: FirebaseFirestore, private val view: C
 
     }
 
+    fun updateExam(
+        examId: String,
+        examName: String,
+        examType: String,
+        examDesc: String,
+        imageUrl: String,
+        accessType: String,
+        accessCode: String,
+        startDate: String,
+        endDate: String,
+        image: ByteArray?,
+        uid: String,
+        kelas: String,
+        tags: MutableList<String?>
+    ) {
+        view.isLoading(true)
+        val data = hashMapOf<String, Any>(
+            "title" to examName,
+            "desc" to examDesc,
+            "category" to examType,
+            "image" to imageUrl,
+            "puzzles" to 0,
+            "played" to 0,
+            "rating" to 0.0,
+            "accessType" to accessType,
+            "accessCode" to accessCode,
+            "startDate" to startDate,
+            "endDate" to endDate,
+            "uid" to uid,
+            "kelas" to kelas,
+            "tags" to tags
+        )
+        db.collection("col_exam").document(examId)
+            .set(data)
+            .addOnSuccessListener {
+                if (image != null) deleteImage(examId, image)
+                else view.showUploadExamResult(examId)
+            }
+            .addOnFailureListener {
+                view.isError(it.localizedMessage)
+                view.isLoading(false)
+            }
+
+    }
+
+    private fun deleteImage(idExam: String, dataImage: ByteArray) {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.getReferenceFromUrl("gs://formforexam-670e3.appspot.com")
+        val imageRef = storageRef.child("images/${idExam}.jpg")
+        imageRef.delete().addOnSuccessListener {
+            uploadExamImage(idExam, dataImage)
+        }
+            .addOnFailureListener {
+                logE(it.localizedMessage)
+            }
+    }
+
     private fun uploadExamImage(idExam: String, dataImage: ByteArray) {
         val storage = FirebaseStorage.getInstance()
         val storageRef = storage.getReferenceFromUrl("gs://formforexam-670e3.appspot.com")
@@ -102,6 +159,39 @@ class CreateExamPresenter(private val db: FirebaseFirestore, private val view: C
                 view.isError(it.localizedMessage)
                 view.isLoading(false)
             }
+    }
+
+    fun updateQuestion(idExam: String, data: QuizModel, idQuiz: String) {
+        db.collection("col_exam/${idExam}/questions").document(idQuiz)
+            .get()
+            .addOnSuccessListener {
+                if (it.exists()) {
+                    db.collection("col_exam").document(idExam)
+                        .collection("questions").document(idQuiz)
+                        .set(data)
+                        .addOnSuccessListener { result ->
+                            view.showUploadExamResult(idExam)
+                        }
+                        .addOnFailureListener { result ->
+                            view.isError(result.localizedMessage)
+                            view.isLoading(false)
+                        }
+                } else {
+                    db.collection("col_exam").document(idExam)
+                        .collection("questions")
+                        .add(data)
+                        .addOnSuccessListener {
+                            view.showUploadExamResult(idExam)
+                        }
+                        .addOnFailureListener { result ->
+                            view.isError(result.localizedMessage)
+                            view.isLoading(false)
+                        }
+                }
+            }.addOnFailureListener {
+                logE(it.localizedMessage)
+            }
+
     }
 
     fun getQuizData(examId: String) {

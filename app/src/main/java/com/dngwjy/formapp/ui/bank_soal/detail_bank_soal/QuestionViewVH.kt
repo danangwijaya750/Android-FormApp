@@ -17,8 +17,8 @@ class QuestionViewVH(override val containerView: View) : RecyclerView.ViewHolder
     LayoutContainer, RvAdapter.BinderData<QuizModel?> {
     override fun bindData(data: QuizModel?, listen: (QuizModel?) -> Unit, position: Int) {
         tv_question_number.text = "${position + 1}"
-        if(SharedPref(containerView.context).userRole=="teacher"){
-            bt_import.visibility=View.VISIBLE
+        if (SharedPref(containerView.context).userRole == "teacher") {
+            bt_import.visibility = View.VISIBLE
             bt_import.setOnClickListener {
                 listen(data)
             }
@@ -34,6 +34,11 @@ class QuestionViewVH(override val containerView: View) : RecyclerView.ViewHolder
                 ll_isian.visibility = View.VISIBLE
                 isIsian(data, position, listen)
             }
+        }
+        if (DetailBankSoalActivity.importCaller == "import") {
+            bt_import.visibility = View.VISIBLE
+        } else {
+            bt_import.visibility = View.INVISIBLE
         }
     }
 
@@ -51,9 +56,11 @@ class QuestionViewVH(override val containerView: View) : RecyclerView.ViewHolder
             rdBtn.layoutParams = params
             rdBtn.textSize = 20f
             rdBtn.setPadding(10, 10, 10, 10)
-            rdBtn.id=View.generateViewId()
-            rdBtn.background=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
-            rdBtn.buttonDrawable=containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
+            rdBtn.id = View.generateViewId()
+            rdBtn.background =
+                containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
+            rdBtn.buttonDrawable =
+                containerView.context.resources.getDrawable(R.drawable.rb_selector_drawable)
             val states = arrayOf(
                 intArrayOf(android.R.attr.state_checked),
                 intArrayOf(-android.R.attr.state_checked)
@@ -74,7 +81,7 @@ class QuestionViewVH(override val containerView: View) : RecyclerView.ViewHolder
         }
     }
 
-    private fun clearRg(){
+    private fun clearRg() {
         val count: Int = rg_option.childCount
         if (count > 0) {
             for (i in count - 1 downTo 0) {

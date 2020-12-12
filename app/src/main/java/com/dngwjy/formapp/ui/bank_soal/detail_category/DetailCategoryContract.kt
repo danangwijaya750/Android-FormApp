@@ -45,6 +45,24 @@ class DetailCategoryPresenter(
             }
     }
 
+    fun searchData(query: String, type: String) {
+        db.collection("col_exam")
+            .whereArrayContains("title", query)
+            .whereEqualTo("accessType", type)
+            .get()
+            .addOnSuccessListener {
+                if (!it.isEmpty) {
+                    val result = mutableListOf<ExamModel?>()
+                    it.documents.forEach { doc ->
+                        result.add(doc.toObject(ExamModel::class.java))
+                    }
+                    view.showResult(result)
+                }
+            }
+            .addOnFailureListener {
+                logE(it.localizedMessage)
+            }
+    }
 
 }
 

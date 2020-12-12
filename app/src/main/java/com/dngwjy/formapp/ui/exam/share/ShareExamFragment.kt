@@ -18,6 +18,8 @@ import android.widget.AdapterView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.dngwjy.formapp.R
 import com.dngwjy.formapp.ui.exam.CreateExamActivity
 import com.dngwjy.formapp.util.logE
@@ -45,21 +47,10 @@ class ShareExamFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tv_mulai.text = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm").format(
-            Instant.now().atZone(
-                ZoneId.of("Asia/Jakarta")
-            )
-        )
-        tv_selesai.text = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm").format(
-            Instant.now()
-                .atZone(ZoneId.of("Asia/Jakarta")).plusHours(1)
-        )
-        CreateExamActivity.startDate = tv_mulai.text.toString()
-        CreateExamActivity.endDate = tv_selesai.text.toString()
 
         tv_mulai.setOnClickListener {
             pickDateTime(0)
-            CreateExamActivity.startDate = tv_mulai.text.toString()
+
         }
         tv_selesai.setOnClickListener {
             pickDateTime(1)
@@ -68,12 +59,31 @@ class ShareExamFragment : Fragment() {
         iv_image_exam.setOnClickListener {
             pickImage()
         }
+        if (CreateExamActivity.uploaded) {
+            Glide.with(this.context!!)
+                .asBitmap()
+                .load(CreateExamActivity.imageUrl)
+                .into(object : SimpleTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        setImage(resource)
+                        CreateExamActivity.bitmap = resource
+                    }
+
+                })
+        }
         et_tags.run {
-            inputType=InputType.TYPE_CLASS_TEXT
-            imeOptions=EditorInfo.IME_ACTION_DONE
+            inputType = InputType.TYPE_CLASS_TEXT
+            imeOptions = EditorInfo.IME_ACTION_DONE
 
             setOnEditorActionListener(object : TextView.OnEditorActionListener {
-                override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                override fun onEditorAction(
+                    v: TextView?,
+                    actionId: Int,
+                    event: KeyEvent?
+                ): Boolean {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         val tags = et_tags.text.toString().split("#").toTypedArray().toMutableList()
                         tags.removeAt(0)
@@ -168,8 +178,14 @@ class ShareExamFragment : Fragment() {
                         pickedDateTime.set(year, month, day, hour, minute)
                         val sdf = SimpleDateFormat("dd-MM-yyyy hh:mm")
                         when (caller) {
-                            0 -> tv_mulai.text = sdf.format(pickedDateTime.time)
-                            1 -> tv_selesai.text = sdf.format(pickedDateTime.time)
+                            0 -> {
+                                tv_mulai.text = sdf.format(pickedDateTime.time)
+                                CreateExamActivity.startDate = tv_mulai.text.toString()
+                            }
+                            1 -> {
+                                tv_selesai.text = sdf.format(pickedDateTime.time)
+                                CreateExamActivity.endDate = tv_selesai.text.toString()
+                            }
                         }
                     },
                     startHour,
@@ -189,6 +205,23 @@ class ShareExamFragment : Fragment() {
             CreateExamActivity.fragmentPosition = 2
             CreateExamActivity.totalScore = CreateExamActivity.questionList.sumBy { it!!.score }
             et_score.setText(CreateExamActivity.totalScore.toString())
+            if (!CreateExamActivity.uploaded) {
+                tv_mulai.text = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm").format(
+                    Instant.now().atZone(
+                        ZoneId.of("Asia/Jakarta")
+                    )
+                )
+                tv_selesai.text = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm").format(
+                    Instant.now()
+                        .atZone(ZoneId.of("Asia/Jakarta")).plusHours(1)
+                )
+                CreateExamActivity.startDate = tv_mulai.text.toString()
+                CreateExamActivity.endDate = tv_selesai.text.toString()
+            } else {
+                tv_mulai.text = CreateExamActivity.startDate
+                tv_selesai.text = CreateExamActivity.endDate
+            }
+
             if (CreateExamActivity.tags.size > 0) {
                 et_tags.setText(
                     CreateExamActivity.tags.joinToString(
